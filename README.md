@@ -1,5 +1,11 @@
 # @appnest/masonry-layout
 
+<a href="https://npmcharts.com/compare/@appnest/masonry-layout?minimal=true"><img alt="Downloads per month" src="https://img.shields.io/npm/dm/@appnest/masonry-layout.svg" height="20"></img></a>
+<a href="https://david-dm.org/andreasbm/masonry-layout"><img alt="Dependencies" src="https://img.shields.io/david/andreasbm/masonry-layout.svg" height="20"></img></a>
+<a href="https://www.npmjs.com/package/@appnest/masonry-layout"><img alt="NPM Version" src="https://img.shields.io/npm/v/@appnest/masonry-layout.svg" height="20"></img></a>
+<a href="https://github.com/andreasbm/masonry-layout/graphs/contributors"><img alt="Contributors" src="https://img.shields.io/github/contributors/andreasbm/masonry-layout.svg" height="20"></img></a>
+<a href="https://opensource.org/licenses/MIT"><img alt="MIT License" src="https://img.shields.io/badge/License-MIT-yellow.svg" height="20"></img></a>
+
 ## What is this?
 
 This is an efficient and fast web component that gives you a beautiful masonry layout. Go here to see a demo [https://appnest-demo.firebaseapp.com/masonry-layout](https://appnest-demo.firebaseapp.com/masonry-layout).
@@ -29,7 +35,6 @@ Import `@appnest/masonry-layout` somewhere in your code and you're ready to go! 
 </masonry-layout>
 ```
 
-"collock",
 ## Customize
 
 Customize the functionality by applying the attributes.
