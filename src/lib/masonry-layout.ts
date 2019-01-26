@@ -213,34 +213,6 @@ export class MasonryLayout extends HTMLElement {
 			cancelAnimationFrame(this.nextAnimationFrame);
 		}
 
-		// const BULK = 100;
-		// const schedulePlacement = (i: number, deferredLayout: DeferredLayout[]) => {
-		// 	this.nextAnimationFrame = requestAnimationFrame(() => {
-		// 		if (this.nextAnimationFrame == undefined) {
-		// 			return;
-		// 		}
-		//
-		// 		let placements = 0;
-		// 		let layout: DeferredLayout | undefined;
-		// 		while (placements < BULK && (layout = deferredLayout.shift())) {
-		// 			const {$item, left, top, col} = layout;
-		//
-		// 			Object.assign($item!.style, {
-		// 				transform: `translate(${left}px, ${top}px)`,
-		// 				width: `${width}px`
-		// 			});
-		//
-		// 			// Lock the col for the item
-		// 			setMasonryColData($item!, col);
-		// 			placements++;
-		// 		}
-		//
-		// 		if ($items.length > 0) {
-		// 			schedulePlacement(i, deferredLayout);
-		// 		}
-		// 	});
-		// };
-
 		this.nextAnimationFrame = requestAnimationFrame(() => {
 			updateHeight(this, colHeightMap);
 
@@ -263,9 +235,6 @@ export class MasonryLayout extends HTMLElement {
 				this.classList.add(DISTRIBUTED_CLASS);
 			}
 		});
-
-		// console.log("#### PLACING", $items.length);
-		// schedulePlacement(0, deferredLayout);
 
 		// Update the height without causing the resize event to trigger a new layout
 		this.cancelNextResizeEvent = true;

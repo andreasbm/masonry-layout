@@ -84,7 +84,7 @@ The `collock` attribute locks the columns. When the columns are locked, the layo
 If you want to force layout to can simply call the `layout()` function on the masonry layout.
 
 ```js
-document.querySelector("#masonry").layout();
+document.querySelector("masonry-layout").layout();
 ```
 
 ## Note!
