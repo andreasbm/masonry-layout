@@ -1,6 +1,6 @@
 {
 	"name": "@appnest/masonry-layout",
-	"version": "0.0.3",
+	"version": "0.0.4",
 	"license": "MIT",
 	"module": "index.js",
 	"author": "Appnest",
