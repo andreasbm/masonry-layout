@@ -21,6 +21,12 @@ This is an efficient and fast web component that gives you a beautiful masonry l
 
 <img src="https://raw.githubusercontent.com/andreasbm/masonry-layout/master/example.gif" width="600">
 
+## Installation
+
+```javascript
+npm i @appnest/masonry-layout
+```
+
 ## Example
 
 Import `@appnest/masonry-layout` somewhere in your code and you're ready to go! Simply add the masonry layout to your `html` and you'll be singing and dancing from not having to build the masonry layout yourself.
