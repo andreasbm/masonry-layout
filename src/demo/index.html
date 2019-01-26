@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<base href="/">
+	<title>masonry-layout</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+	<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+
+	<style>
+
+		body {
+			padding-bottom: 200px;
+		}
+		.item {
+			object-fit: cover;
+			cursor: pointer;
+		}
+
+		#tools {
+			position: fixed;
+			bottom: 0;
+			left: 0;
+			width: 100%;
+			background: white;
+			box-shadow: 0 -3px 20px rgba(0, 0, 0, 0.3);
+			padding: 24px;
+		}
+
+		.tool {
+			padding: 12px 24px;
+			cursor: pointer;
+			user-select: none;
+		}
+
+	</style>
+</head>
+<body>
+
+<masonry-layout id="masonry"></masonry-layout>
+
+<div id="tools">
+	<button id="add_button" class="tool">Add item</button>
+	<button id="toggle_col_lock_button" class="tool">Lock columns</button>
+	<button id="col_count_button" class="tool">Change amount of columns</button>
+	<button id="spacing_button" class="tool">Change amount of spacing</button>
+	<button id="toggle_transition_button" class="tool">Apply transition</button>
+</div>
+
+<noscript>
+	<p>Please enable Javascript in your browser.</p>
+</noscript>
+
+</body>
+</html>
