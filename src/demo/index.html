@@ -12,6 +12,11 @@
 		body {
 			padding-bottom: 200px;
 		}
+
+		* {
+			box-sizing: border-box;
+		}
+
 		.item {
 			object-fit: cover;
 			cursor: pointer;
@@ -25,6 +30,9 @@
 			background: white;
 			box-shadow: 0 -3px 20px rgba(0, 0, 0, 0.3);
 			padding: 24px;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
 		}
 
 		.tool {
@@ -32,7 +40,6 @@
 			cursor: pointer;
 			user-select: none;
 		}
-
 	</style>
 </head>
 <body>
@@ -40,11 +47,14 @@
 <masonry-layout id="masonry"></masonry-layout>
 
 <div id="tools">
-	<button id="add_button" class="tool">Add item</button>
-	<button id="toggle_col_lock_button" class="tool">Lock columns</button>
-	<button id="col_count_button" class="tool">Change amount of columns</button>
-	<button id="spacing_button" class="tool">Change amount of spacing</button>
-	<button id="toggle_transition_button" class="tool">Apply transition</button>
+	<div>
+		<button id="add_button" class="tool">Add item</button>
+		<button id="toggle_col_lock_button" class="tool">Lock columns</button>
+		<button id="col_count_button" class="tool">Change amount of columns</button>
+		<button id="spacing_button" class="tool">Change amount of spacing</button>
+		<button id="toggle_transition_button" class="tool">Apply transition</button>
+	</div>
+	<a id="link" href="https://github.com/andreasbm/masonry-layout" target="_blank" rel="noopener">Source</a>
 </div>
 
 <noscript>
