@@ -4,7 +4,8 @@
 	"license": "MIT",
 	"module": "index.js",
 	"author": "Appnest",
-	"description": "A masonry layout component",
+	"website": "https://appnest-demo.firebaseapp.com/masonry-layout/",
+	"description": "An efficient and fast web component that gives you a beautiful masonry layout",
 	"bugs": {
 		"url": "https://github.com/andreasbm/masonry-layout/issues"
 	},
@@ -45,7 +46,6 @@
 		"s": "npm run s:dev",
 		"deploy": "npm run b:demo:prod && firebase deploy"
 	},
-	"peerDependencies": {},
 	"devDependencies": {
 		"@wessberg/rollup-plugin-ts": "1.1.18",
 		"@appnest/web-config": "0.2.1"
