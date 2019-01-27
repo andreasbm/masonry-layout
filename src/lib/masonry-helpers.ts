@@ -1,16 +1,13 @@
 export const LAYOUT_DEBOUNCE_MS = 300;
 export const MIN_HEIGHT_PRIORITY_SLACK_PX = 10;
-export const DISTRIBUTED_CLASS = "distributed";
+export const DISTRIBUTED_ATTR = "data-masonry-distributed";
 export const DEFAULT_COLS: MasonryCols = "auto";
 export const DEFAULT_MAX_COL_WIDTH = 400;
 export const DEFAULT_SPACING = 24;
 
 export type ColHeightMap = number[];
 export type MasonryCols = number | "auto";
-export type DeferredLayout = {top: number, left: number, col: number, $item: HTMLElement};
-
-
-const COL_ATTR_NAME = "data-masonry-col";
+export type MasonryItemLayout = {top: number, left: number, col: number};
 
 const DEBOUNCE_MAP: {[id: string]: number} = {};
 
@@ -44,13 +41,10 @@ export function getColCount (totalWidth: number, cols: MasonryCols, maxColWidth:
 
 /**
  * Sets the height of the component to the height of the tallest col.
- * @param $elem
  * @param colHeightMap
  */
-export function updateHeight ($elem: HTMLElement, colHeightMap: ColHeightMap): number {
-	const maxHeight = Object.values(colHeightMap).reduce((acc, height) => Math.max(acc, height), 0);
-	$elem.style.height = `${maxHeight}px`;
-	return maxHeight;
+export function tallestColHeight (colHeightMap: ColHeightMap): number {
+	return Object.values(colHeightMap).reduce((acc, height) => Math.max(acc, height), 0);
 }
 
 /**
@@ -77,24 +71,6 @@ export function itemPosition (i: number,
 	const top = (colHeightMap[colIndex] || 0) + (isFirstInRow ? 0 : spacing);
 
 	return {top, left};
-}
-
-/**
- * Returns the masonry col lock.
- * @param $item
- */
-export function getMasonryColData ($item: HTMLElement): number | undefined {
-	const col = parseInt($item.getAttribute(COL_ATTR_NAME) || "");
-	return isNaN(col) ? undefined : col;
-}
-
-/**
- * Sets the masonry col lock.
- * @param $item
- * @param col
- */
-export function setMasonryColData ($item: HTMLElement, col: number) {
-	$item.setAttribute(COL_ATTR_NAME, col.toString());
 }
 
 /**

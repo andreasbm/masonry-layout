@@ -1,4 +1,4 @@
-import { ColHeightMap, createEmptyColHeightMap, debounce, DEFAULT_COLS, DEFAULT_MAX_COL_WIDTH, DEFAULT_SPACING, DeferredLayout, DISTRIBUTED_CLASS, getBooleanAttribute, getColCount, getColWidth, getMasonryColData, getNumberAttribute, getShortestCol, itemPosition, LAYOUT_DEBOUNCE_MS, MasonryCols, setBooleanAttribute, setMasonryColData, updateHeight } from "./masonry-helpers";
+import { ColHeightMap, createEmptyColHeightMap, debounce, DEFAULT_COLS, DEFAULT_MAX_COL_WIDTH, DEFAULT_SPACING, DISTRIBUTED_ATTR, getBooleanAttribute, getColCount, getColWidth, getNumberAttribute, getShortestCol, itemPosition, LAYOUT_DEBOUNCE_MS, MasonryCols, MasonryItemLayout, setBooleanAttribute, tallestColHeight } from "./masonry-helpers";
 
 declare interface ResizeObserver {
 	observe (target: Element): void;
@@ -26,12 +26,12 @@ template.innerHTML = `
 		}
 		
 		/* Show the items after they have been distributed */
-		:host(.distributed) {
+		:host([data-masonry-distributed]) {
 			opacity: 1;
 		}
 		
 		/* Apply the transition after the items have been distributed */
-		:host([transition].distributed) ::slotted([data-masonry-col]) {
+		:host([transition][data-masonry-distributed]) ::slotted([data-masonry-distributed]) {
 			transition: var(--masonry-layout-item-transition);
 		}
 	</style>
@@ -46,12 +46,16 @@ export class MasonryLayout extends HTMLElement {
 	private cancelNextResizeEvent = false;
 	private nextAnimationFrame: number | undefined = undefined;
 
-	static get observedAttributes() { return [
-		"maxcolwidth",
-		"collock",
-		"spacing",
-		"cols"
-	];}
+	private itemCache: WeakMap<HTMLElement, MasonryItemLayout> = new WeakMap<HTMLElement, MasonryItemLayout>();
+
+	static get observedAttributes () {
+		return [
+			"maxcolwidth",
+			"collock",
+			"spacing",
+			"cols"
+		];
+	}
 
 	// The maximum width of each column if cols are set to auto.
 	set maxColWidth (v: number) {
@@ -161,6 +165,9 @@ export class MasonryLayout extends HTMLElement {
 		if (this.ro != null) this.ro.unobserve(this);
 	}
 
+	/**
+	 * Called when the element resizes and schedules a layout.
+	 */
 	private didResize () {
 		if (this.cancelNextResizeEvent) {
 			this.cancelNextResizeEvent = false;
@@ -170,42 +177,51 @@ export class MasonryLayout extends HTMLElement {
 		this.scheduleLayout();
 	}
 
+	/**
+	 * Schedules a layout.
+	 */
 	scheduleLayout () {
 		debounce(this.layout, LAYOUT_DEBOUNCE_MS, "layout");
 	}
 
+	/**
+	 * Re-distributes all of the items.
+	 */
 	layout () {
-		console.log("#layout");
 		const $items = this.$items;
 		const totalWidth = this.offsetWidth;
 
 		const colCount = getColCount(totalWidth, this.cols, this.maxColWidth);
 		const width = getColWidth(totalWidth, this.spacing, colCount);
 		const colHeightMap = createEmptyColHeightMap(colCount);
+		const spacing = this.spacing;
+		const colLock = this.colLock;
 
 		// Check whether the amount of columns has changed (then we need to reorder everything!)
 		const reorderCols = colHeightMap.length !== this.currentColHeightMap.length;
-		if (reorderCols && this.classList.contains(DISTRIBUTED_CLASS)) {
-			this.classList.remove(DISTRIBUTED_CLASS);
+		if (reorderCols && this.hasAttribute(DISTRIBUTED_ATTR)) {
+			this.removeAttribute(DISTRIBUTED_ATTR);
 		}
 
-
-		// Defer the layout reflex as much as possible
-		const deferredLayout: DeferredLayout[] = [];
-
 		// Set the position for each item
+		const $itemsForUpdate: HTMLElement[] = [];
 		for (const [i, $item] of $items.entries()) {
 
 			// Find the shortest col (we need to prioritize filling that one) or used the locked one
-			const currentCol = getMasonryColData($item);
-			const col = this.colLock && !reorderCols && currentCol != null ? currentCol : getShortestCol(colHeightMap);
+			const currentLayout = this.itemCache.get($item);
+			const col = colLock && !reorderCols && currentLayout != null ? currentLayout.col : getShortestCol(colHeightMap);
 
 			// Compute the position for the item
-			const pos = itemPosition(i, width, this.spacing, col, colCount, colHeightMap);
-			deferredLayout.push({...pos, col, $item});
+			const {left, top} = itemPosition(i, width, spacing, col, colCount, colHeightMap);
+
+			// Check if the layout has changed
+			if (currentLayout == null || (currentLayout.left !== left || currentLayout.top !== top || currentLayout.col !== col)) {
+				$itemsForUpdate.push($item);
+				this.itemCache.set($item, {left, top, col});
+			}
 
 			// Add the gained height to the height map
-			colHeightMap[col] = pos.top + $item.offsetHeight;
+			colHeightMap[col] = top + $item.offsetHeight;
 		}
 
 		// Set styles at once to avoid invalidating the layout (TODO: Schedule the style change to avoid unnecessary repaints)
@@ -214,25 +230,31 @@ export class MasonryLayout extends HTMLElement {
 		}
 
 		this.nextAnimationFrame = requestAnimationFrame(() => {
-			updateHeight(this, colHeightMap);
 
-			while (deferredLayout.length > 0 && this.nextAnimationFrame != null) {
-				const {left, top, col, $item} = deferredLayout.shift()!;
+			// Update the layout of all the items that needs update
+			for (const $item of $itemsForUpdate) {
+				const {left, top} = this.itemCache.get($item)!;
 
 				Object.assign($item.style, {
 					transform: `translate(${left}px, ${top}px)`,
 					width: `${width}px`
 				});
 
-				// Apply the masonry col data before next frame to avoid the item from transitioning
-				requestAnimationFrame(() => {
-					setMasonryColData($item, col);
-				});
+				// Tell the rest of the world that this element has been distributed
+				// But defer it to allow the transformation to be applied first
+				if (!$item.hasAttribute(DISTRIBUTED_ATTR)) {
+					requestAnimationFrame(() => {
+						$item.setAttribute(DISTRIBUTED_ATTR, "");
+					});
+				}
 			}
 
+			// Set the height of the entire component to the height of the tallest col
+			this.style.height = `${tallestColHeight(colHeightMap)}px`;
+
 			// Tell the rest of the world that the layout has now been distributed
-			if (!this.classList.contains(DISTRIBUTED_CLASS)) {
-				this.classList.add(DISTRIBUTED_CLASS);
+			if (!this.hasAttribute(DISTRIBUTED_ATTR)) {
+				this.setAttribute(DISTRIBUTED_ATTR, "");
 			}
 		});
 
