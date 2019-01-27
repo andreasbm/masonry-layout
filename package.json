@@ -49,7 +49,6 @@
 		"deploy": "npm run b:demo:prod && firebase deploy"
 	},
 	"devDependencies": {
-		"@wessberg/rollup-plugin-ts": "1.1.18",
-		"@appnest/web-config": "0.2.1"
+		"@appnest/web-config": "0.2.6"
 	}
 }
