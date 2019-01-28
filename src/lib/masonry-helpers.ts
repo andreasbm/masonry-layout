@@ -7,7 +7,7 @@ export const DEFAULT_SPACING = 24;
 
 export type ColHeightMap = number[];
 export type MasonryCols = number | "auto";
-export type MasonryItemLayout = {top: number, left: number, col: number};
+export type MasonryItemLayout = {top: number, left: number, col: number, colWidth: number};
 
 const DEBOUNCE_MAP: {[id: string]: number} = {};
 

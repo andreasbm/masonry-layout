@@ -19,7 +19,8 @@ template.innerHTML = `
 			display: block;
 			position: relative;
 			visibility: hidden;
-			contain: size;
+			transform: translate3d(0, 0, 0);
+			
 		}
 
 		::slotted(*) {
@@ -32,7 +33,7 @@ template.innerHTML = `
 		}
 		
 		/* Apply the transition after the items have been distributed */
-		:host([transition][data-masonry-distributed]) ::slotted([data-masonry-distributed]) {
+		:host([data-masonry-distributed][transition]) ::slotted([data-masonry-distributed]) {
 			transition: var(--masonry-layout-item-transition);
 		}
 	</style>
@@ -45,8 +46,6 @@ export class MasonryLayout extends HTMLElement {
 	private currentColHeightMap: ColHeightMap = [];
 	private ro: ResizeObserver | undefined = undefined;
 	private cancelNextResizeEvent = false;
-	private nextAnimationFrame: number | undefined = undefined;
-
 	private itemCache: WeakMap<HTMLElement, MasonryItemLayout> = new WeakMap<HTMLElement, MasonryItemLayout>();
 
 	static get observedAttributes () {
@@ -190,84 +189,68 @@ export class MasonryLayout extends HTMLElement {
 	 * Re-distributes all of the items.
 	 */
 	layout () {
-		const $items = this.$items;
+		requestAnimationFrame(() => {
+			const $items = this.$items;
 
-		// Forced reflow
-		const totalWidth = this.offsetWidth;
-		const itemHeights = $items.map($item => $item.offsetHeight);
+			// READ: To begin with we batch the reads to avoid layout trashing.
+			// The first get will most likely cause a reflow.
+			const totalWidth = this.offsetWidth;
+			const itemHeights = $items.map($item => $item.offsetHeight);
 
-		const colCount = getColCount(totalWidth, this.cols, this.maxColWidth);
-		const width = getColWidth(totalWidth, this.spacing, colCount);
-		const colHeightMap = createEmptyColHeightMap(colCount);
-		const spacing = this.spacing;
-		const colLock = this.colLock;
+			const colCount = getColCount(totalWidth, this.cols, this.maxColWidth);
+			const colWidth = getColWidth(totalWidth, this.spacing, colCount);
+			const colHeightMap = createEmptyColHeightMap(colCount);
+			const spacing = this.spacing;
+			const colLock = this.colLock;
 
-		// Check whether the amount of columns has changed (then we need to reorder everything!)
-		const reorderCols = colHeightMap.length !== this.currentColHeightMap.length;
-		if (reorderCols && this.hasAttribute(DISTRIBUTED_ATTR)) {
-			this.removeAttribute(DISTRIBUTED_ATTR);
-		}
+			// WRITE: Check whether the amount of columns has changed (then we need to reorder everything!)
+			const reorderCols = colHeightMap.length !== this.currentColHeightMap.length;
 
-		// Set the position for each item
-		const $itemsForUpdate: HTMLElement[] = [];
-		for (const [i, $item] of $items.entries()) {
+			// Set the position for each item
+			for (const [i, $item] of $items.entries()) {
 
-			// Find the shortest col (we need to prioritize filling that one) or used the locked one
-			const currentLayout = this.itemCache.get($item);
-			const col = colLock && !reorderCols && currentLayout != null ? currentLayout.col : getShortestCol(colHeightMap);
+				// Find the shortest col (we need to prioritize filling that one) or used the locked one
+				const currentLayout = this.itemCache.get($item);
+				const col = colLock && !reorderCols && currentLayout != null ? currentLayout.col : getShortestCol(colHeightMap);
 
-			// Compute the position for the item
-			const {left, top} = itemPosition(i, width, spacing, col, colCount, colHeightMap);
+				// Compute the position for the item
+				const {left, top} = itemPosition(i, colWidth, spacing, col, colCount, colHeightMap);
 
-			// Check if the layout has changed
-			if (currentLayout == null ||
-				(currentLayout.left !== left || currentLayout.top !== top || currentLayout.col !== col)) {
-				$itemsForUpdate.push($item);
-				this.itemCache.set($item, {left, top, col});
-			}
+				// Check if the layout has changed
+				if (currentLayout == null ||
+					(currentLayout.colWidth !== colWidth || currentLayout.left !== left || currentLayout.top !== top || currentLayout.col !== col)) {
+					this.itemCache.set($item, {left, top, col, colWidth});
 
-			// Add the gained height to the height map
-			colHeightMap[col] = top + itemHeights[i];
-		}
-
-		// Set styles at once to avoid invalidating the layout (TODO: Schedule the style change to avoid unnecessary repaints)
-		if (this.nextAnimationFrame != null) {
-			cancelAnimationFrame(this.nextAnimationFrame);
-		}
-
-		// Update the height without causing the resize event to trigger a new layout
-		this.cancelNextResizeEvent = true;
-
-		// Store the information about the current height of each col
-		this.currentColHeightMap = colHeightMap;
-
-		this.nextAnimationFrame = requestAnimationFrame(() => {
-
-			// Update the layout of all the items that needs update
-			for (const $item of $itemsForUpdate) {
-				const {left, top} = this.itemCache.get($item)!;
-
-				Object.assign($item.style, {
-					transform: `translate(${left}px, ${top}px)`,
-					width: `${width}px`
-				});
-
-				// Tell the rest of the world that this element has been distributed
-				// But defer it to allow the transformation to be applied first
-				if (!$item.hasAttribute(DISTRIBUTED_ATTR)) {
-					requestAnimationFrame(() => {
-						$item.setAttribute(DISTRIBUTED_ATTR, "");
+					// WRITE: Assign the new position.
+					Object.assign($item.style, {
+						transform: `translate(${left}px, ${top}px)`,
+						width: `${colWidth}px`
 					});
+
+					// WRITE: Tell the rest of the world that this element has been distributed
+					// But defer it to allow the transformation to be applied first
+					if (!$item.hasAttribute(DISTRIBUTED_ATTR)) {
+						requestAnimationFrame(() => {
+							$item.setAttribute(DISTRIBUTED_ATTR, "");
+						});
+					}
 				}
+
+				// Add the gained height to the height map
+				colHeightMap[col] = top + itemHeights[i];
 			}
 
-			// Set the height of the entire component to the height of the tallest col
+			// WRITE: Set the height of the entire component to the height of the tallest col
 			this.style.height = `${tallestColHeight(colHeightMap)}px`;
 
-			// Tell the rest of the world that the layout has now been distributed
+			// WRITE: Tell the rest of the world that the layout has now been distributed
 			if (!this.hasAttribute(DISTRIBUTED_ATTR)) {
 				this.setAttribute(DISTRIBUTED_ATTR, "");
 			}
+
+			// Store the new heights of the cols
+			this.currentColHeightMap = colHeightMap;
+
 		});
 	}
 }
