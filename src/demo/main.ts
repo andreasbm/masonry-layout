@@ -2,7 +2,7 @@ import { MasonryLayout } from "../lib/masonry-layout";
 
 const $masonry = document.querySelector<MasonryLayout>("#masonry")!;
 const INITIAL_ITEMS_COUNT = 200;
-const SHOW_IMAGES = false;
+const SHOW_IMAGES = true;
 
 const $toggleColLockButton = document.querySelector<HTMLButtonElement>("#toggle_col_lock_button")!;
 const $toggleTransitionButton = document.querySelector<HTMLButtonElement>("#toggle_transition_button")!;
