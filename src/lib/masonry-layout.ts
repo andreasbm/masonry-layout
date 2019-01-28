@@ -18,7 +18,8 @@ template.innerHTML = `
 			
 			display: block;
 			position: relative;
-			opacity: 0;
+			visibility: hidden;
+			contain: size;
 		}
 
 		::slotted(*) {
@@ -27,7 +28,7 @@ template.innerHTML = `
 		
 		/* Show the items after they have been distributed */
 		:host([data-masonry-distributed]) {
-			opacity: 1;
+			visibility: visible;
 		}
 		
 		/* Apply the transition after the items have been distributed */
@@ -154,6 +155,7 @@ export class MasonryLayout extends HTMLElement {
 		} else {
 			window.addEventListener("resize", this.didResize);
 		}
+
 	}
 
 	/**
@@ -189,7 +191,10 @@ export class MasonryLayout extends HTMLElement {
 	 */
 	layout () {
 		const $items = this.$items;
+
+		// Forced reflow
 		const totalWidth = this.offsetWidth;
+		const itemHeights = $items.map($item => $item.offsetHeight);
 
 		const colCount = getColCount(totalWidth, this.cols, this.maxColWidth);
 		const width = getColWidth(totalWidth, this.spacing, colCount);
@@ -215,19 +220,26 @@ export class MasonryLayout extends HTMLElement {
 			const {left, top} = itemPosition(i, width, spacing, col, colCount, colHeightMap);
 
 			// Check if the layout has changed
-			if (currentLayout == null || (currentLayout.left !== left || currentLayout.top !== top || currentLayout.col !== col)) {
+			if (currentLayout == null ||
+				(currentLayout.left !== left || currentLayout.top !== top || currentLayout.col !== col)) {
 				$itemsForUpdate.push($item);
 				this.itemCache.set($item, {left, top, col});
 			}
 
 			// Add the gained height to the height map
-			colHeightMap[col] = top + $item.offsetHeight;
+			colHeightMap[col] = top + itemHeights[i];
 		}
 
 		// Set styles at once to avoid invalidating the layout (TODO: Schedule the style change to avoid unnecessary repaints)
 		if (this.nextAnimationFrame != null) {
 			cancelAnimationFrame(this.nextAnimationFrame);
 		}
+
+		// Update the height without causing the resize event to trigger a new layout
+		this.cancelNextResizeEvent = true;
+
+		// Store the information about the current height of each col
+		this.currentColHeightMap = colHeightMap;
 
 		this.nextAnimationFrame = requestAnimationFrame(() => {
 
@@ -257,12 +269,6 @@ export class MasonryLayout extends HTMLElement {
 				this.setAttribute(DISTRIBUTED_ATTR, "");
 			}
 		});
-
-		// Update the height without causing the resize event to trigger a new layout
-		this.cancelNextResizeEvent = true;
-
-		// Store the information about the current height of each col
-		this.currentColHeightMap = colHeightMap;
 	}
 }
 

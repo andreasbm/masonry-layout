@@ -2,6 +2,7 @@ import { MasonryLayout } from "../lib/masonry-layout";
 
 const $masonry = document.querySelector<MasonryLayout>("#masonry")!;
 const INITIAL_ITEMS_COUNT = 200;
+const SHOW_IMAGES = true;
 
 const $toggleColLockButton = document.querySelector<HTMLButtonElement>("#toggle_col_lock_button")!;
 const $toggleTransitionButton = document.querySelector<HTMLButtonElement>("#toggle_transition_button")!;
@@ -68,9 +69,12 @@ function addNewItem (): HTMLImageElement {
 
 	const $item: HTMLImageElement = document.createElement("img");
 	$item.classList.add("item");
-	$item.src = item.image;
 	$item.style.backgroundColor = item.color;
 	$item.style.height = `${item.height}px`;
+
+	if (SHOW_IMAGES) {
+		$item.src = item.image;
+	}
 
 	$masonry.appendChild($item);
 	$item.addEventListener("click", () => updateHeight($item));
