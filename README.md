@@ -5,6 +5,7 @@
 <a href="https://www.npmjs.com/package/@appnest/masonry-layout"><img alt="NPM Version" src="https://img.shields.io/npm/v/@appnest/masonry-layout.svg" height="20"></img></a>
 <a href="https://github.com/andreasbm/masonry-layout/graphs/contributors"><img alt="Contributors" src="https://img.shields.io/github/contributors/andreasbm/masonry-layout.svg" height="20"></img></a>
 <a href="https://opensource.org/licenses/MIT"><img alt="MIT License" src="https://img.shields.io/badge/License-MIT-yellow.svg" height="20"></img></a>
+[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/owner/my-element)
 
 ## What is this?
 
@@ -13,6 +14,7 @@ This is an efficient and fast web component that gives you a beautiful masonry l
 **Features**
 
 * Works right out of the box (just add it to your markup)
+* Created using only vanilla js - no dependencies and framework agnostic!
 * Can lock columns if specified
 * Automatically re-distribute items when the size of the grid changes or new elements are added
 * Can add transitions to elements when they reflow

@@ -69,11 +69,12 @@ function addNewItem (): HTMLImageElement {
 
 	const $item: HTMLImageElement = document.createElement("img");
 	$item.classList.add("item");
-	$item.style.backgroundColor = item.color;
 	$item.style.height = `${item.height}px`;
 
 	if (SHOW_IMAGES) {
 		$item.src = item.image;
+	} else {
+		$item.style.backgroundColor = item.color;
 	}
 
 	$masonry.appendChild($item);
