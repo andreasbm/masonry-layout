@@ -38,7 +38,7 @@ export function getColWidth (totalWidth: number, spacing: number, colCount: numb
  * @param maxColWidth
  */
 export function getColCount (totalWidth: number, cols: MasonryCols, maxColWidth: number): number {
-	return isNaN(<number>cols) ? Math.floor(totalWidth / maxColWidth) : <number>cols;
+	return isNaN(<number>cols) ? Math.max(1, Math.floor(totalWidth / maxColWidth)) : <number>cols;
 }
 
 /**

@@ -210,11 +210,11 @@ export class MasonryLayout extends HTMLElement {
 			const totalWidth = this.offsetWidth;
 			const itemHeights = $items.map($item => $item.offsetHeight);
 
-			const colCount = getColCount(totalWidth, this.cols, this.maxColWidth);
-			const colWidth = getColWidth(totalWidth, this.spacing, colCount);
-			const colHeightMap = createEmptyColHeightMap(colCount);
 			const spacing = this.spacing;
 			const colLock = this.colLock;
+			const colCount = getColCount(totalWidth, this.cols, this.maxColWidth);
+			const colWidth = getColWidth(totalWidth, spacing, colCount);
+			const colHeightMap = createEmptyColHeightMap(colCount);
 
 			// Check whether the amount of columns has changed.
 			// If they have changed we need to reorder everything, also if the collock is set to true!
