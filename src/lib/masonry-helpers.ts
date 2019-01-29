@@ -21,6 +21,8 @@ export function createEmptyColHeightMap (colCount: number): ColHeightMap {
 
 /**
  * Returns the width of a col.
+ * The width of the column will be the total width of the element divided by the amount
+ * of columns, subtracted with the total amount of spacing.
  * @param totalWidth
  * @param spacing
  * @param colCount
@@ -63,11 +65,14 @@ export function itemPosition (i: number,
                               colCount: number,
                               colHeightMap: ColHeightMap): {top: number, left: number} {
 
-	// Compute the left offset of the item
+	// Compute the left offset of the item. We find the left offset by first computing
+	// the width of the columns added together with the spacing before the current element.
 	const left = (width * colIndex) + (spacing * colIndex);
 
-	// Compute the top offset of the item
+	// If the element in the first row we need to treat it different by not adding spacing before it.
 	const isFirstInRow = i < colCount;
+
+	// The top offset will be the height of the chosen column added together with the spacing.
 	const top = (colHeightMap[colIndex] || 0) + (isFirstInRow ? 0 : spacing);
 
 	return {top, left};
@@ -86,7 +91,8 @@ export function debounce (cb: (() => void), ms: number, id: string) {
 }
 
 /**
- * Returns the shortest col from the col height map.
+ * Returns the shortest col from the col height map. When finding the shortest col we need to subtract
+ * a small offset to account for variations in the rounding.
  * @param colHeightMap
  */
 export function getShortestCol (colHeightMap: ColHeightMap): number {

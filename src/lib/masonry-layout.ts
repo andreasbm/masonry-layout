@@ -42,12 +42,8 @@ template.innerHTML = `
 
 export class MasonryLayout extends HTMLElement {
 
-	// A map containing the height for each col
-	private currentColHeightMap: ColHeightMap = [];
-	private ro: ResizeObserver | undefined = undefined;
-	private cancelNextResizeEvent = false;
-	private itemCache: WeakMap<HTMLElement, MasonryItemLayout> = new WeakMap<HTMLElement, MasonryItemLayout>();
-
+	// The observed attributes.
+	// Whenever one of these changes we need to update the layout.
 	static get observedAttributes () {
 		return [
 			"maxcolwidth",
@@ -56,6 +52,12 @@ export class MasonryLayout extends HTMLElement {
 			"cols"
 		];
 	}
+
+	// A map containing the height for each col
+	private currentColHeightMap: ColHeightMap = [];
+	private ro: ResizeObserver | undefined = undefined;
+	private cancelNextResizeEvent = false;
+	private itemCache: WeakMap<HTMLElement, MasonryItemLayout> = new WeakMap<HTMLElement, MasonryItemLayout>();
 
 	// The maximum width of each column if cols are set to auto.
 	set maxColWidth (v: number) {
@@ -121,22 +123,33 @@ export class MasonryLayout extends HTMLElement {
 	constructor () {
 		super();
 
+		// Attach the shadow root
 		const shadow = this.attachShadow({mode: "open"});
 		shadow.appendChild(template.content.cloneNode(true));
 
+		// Bind the relevant functions to the element
 		this.scheduleLayout = this.scheduleLayout.bind(this);
 		this.layout = this.layout.bind(this);
 		this.didResize = this.didResize.bind(this);
 	}
 
+	/**
+	 * Attaches the listeners when the element is added to the DOM.
+	 */
 	connectedCallback () {
 		this.attachListeners();
 	}
 
+	/**
+	 * Removes listeners when the element is removed from the DOM.
+	 */
 	disconnectedCallback () {
 		this.detachListeners();
 	}
 
+	/**
+	 * Updates the layout when the observed attributes changes.
+	 */
 	attributeChangedCallback () {
 		this.scheduleLayout();
 	}
@@ -203,13 +216,14 @@ export class MasonryLayout extends HTMLElement {
 			const spacing = this.spacing;
 			const colLock = this.colLock;
 
-			// WRITE: Check whether the amount of columns has changed (then we need to reorder everything!)
+			// Check whether the amount of columns has changed.
+			// If they have changed we need to reorder everything, also if the collock is set to true!
 			const reorderCols = colHeightMap.length !== this.currentColHeightMap.length;
 
 			// Set the position for each item
 			for (const [i, $item] of $items.entries()) {
 
-				// Find the shortest col (we need to prioritize filling that one) or used the locked one
+				// Find the shortest col (we need to prioritize filling that one) or used the existing (locked) one
 				const currentLayout = this.itemCache.get($item);
 				const col = colLock && !reorderCols && currentLayout != null ? currentLayout.col : getShortestCol(colHeightMap);
 
@@ -250,7 +264,6 @@ export class MasonryLayout extends HTMLElement {
 
 			// Store the new heights of the cols
 			this.currentColHeightMap = colHeightMap;
-
 		});
 	}
 }

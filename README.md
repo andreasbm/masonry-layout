@@ -17,7 +17,8 @@ This is an efficient and fast web component that gives you a beautiful masonry l
 * Automatically re-distribute items when the size of the grid changes or new elements are added
 * Can add transitions to elements when they reflow
 * Can customize the spacing and the amount of columns
-* Efficient, fast and small
+* Efficient & fast
+* Super small (1.5kb minified & gzipped)
 
 <img src="https://raw.githubusercontent.com/andreasbm/masonry-layout/master/example.gif" width="600">
 
