@@ -54,8 +54,7 @@ export default {
 			...defaultServePlugins({
 				serveConfig: {
 					port: 1338,
-					contentBase: folders.dist,
-					host: "0.0.0.0"
+					contentBase: folders.dist
 				},
 				livereloadConfig: {
 					watch: folders.dist
