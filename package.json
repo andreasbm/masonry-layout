@@ -49,6 +49,6 @@
 		"deploy": "npm run b:demo:prod && firebase deploy"
 	},
 	"devDependencies": {
-		"@appnest/web-config": "0.2.6"
+		"@appnest/web-config": "0.3.0"
 	}
 }

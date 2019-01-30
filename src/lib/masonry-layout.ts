@@ -193,8 +193,9 @@ export class MasonryLayout extends HTMLElement {
 
 	/**
 	 * Schedules a layout.
+	 * @param ms - The debounce time
 	 */
-	scheduleLayout () {
+	scheduleLayout (ms: number = LAYOUT_DEBOUNCE_MS) {
 		debounce(this.layout, LAYOUT_DEBOUNCE_MS, "layout");
 	}
 
