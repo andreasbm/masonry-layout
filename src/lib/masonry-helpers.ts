@@ -1,9 +1,9 @@
-export const LAYOUT_DEBOUNCE_MS = 300;
 export const MIN_HEIGHT_PRIORITY_SLACK_PX = 10;
 export const DISTRIBUTED_ATTR = "data-masonry-distributed";
 export const DEFAULT_COLS: MasonryCols = "auto";
 export const DEFAULT_MAX_COL_WIDTH = 400;
 export const DEFAULT_SPACING = 24;
+export const DEFAULT_DEBOUNCE_MS = 300;
 
 export type ColHeightMap = number[];
 export type MasonryCols = number | "auto";

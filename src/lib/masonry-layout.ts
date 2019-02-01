@@ -1,4 +1,4 @@
-import { ColHeightMap, createEmptyColHeightMap, debounce, DEFAULT_COLS, DEFAULT_MAX_COL_WIDTH, DEFAULT_SPACING, DISTRIBUTED_ATTR, getBooleanAttribute, getColCount, getColWidth, getNumberAttribute, getShortestCol, itemPosition, LAYOUT_DEBOUNCE_MS, MasonryCols, MasonryItemLayout, setBooleanAttribute, tallestColHeight } from "./masonry-helpers";
+import { ColHeightMap, createEmptyColHeightMap, debounce, DEFAULT_COLS, DEFAULT_DEBOUNCE_MS, DEFAULT_MAX_COL_WIDTH, DEFAULT_SPACING, DISTRIBUTED_ATTR, getBooleanAttribute, getColCount, getColWidth, getNumberAttribute, getShortestCol, itemPosition, LAYOUT_DEBOUNCE_MS, MasonryCols, MasonryItemLayout, setBooleanAttribute, tallestColHeight } from "./masonry-helpers";
 
 declare interface ResizeObserver {
 	observe (target: Element): void;
@@ -49,7 +49,8 @@ export class MasonryLayout extends HTMLElement {
 			"maxcolwidth",
 			"collock",
 			"spacing",
-			"cols"
+			"cols",
+			"debounce"
 		];
 	}
 
@@ -102,6 +103,15 @@ export class MasonryLayout extends HTMLElement {
 
 	get transition (): boolean {
 		return getBooleanAttribute(this, "transition");
+	}
+
+	// The ms of debounce when the element resizes
+	set debounce (v: number) {
+		this.setAttribute("debounce", v.toString());
+	}
+
+	get debounce (): number {
+		return getNumberAttribute(this, "debounce", DEFAULT_DEBOUNCE_MS);
 	}
 
 	/**
@@ -195,8 +205,8 @@ export class MasonryLayout extends HTMLElement {
 	 * Schedules a layout.
 	 * @param ms - The debounce time
 	 */
-	scheduleLayout (ms: number = LAYOUT_DEBOUNCE_MS) {
-		debounce(this.layout, LAYOUT_DEBOUNCE_MS, "layout");
+	scheduleLayout (ms?: number) {
+		debounce(this.layout, ms || this.debounce, "layout");
 	}
 
 	/**

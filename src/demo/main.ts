@@ -70,6 +70,7 @@ function addNewItem (): HTMLImageElement {
 	const $item: HTMLImageElement = document.createElement("img");
 	$item.classList.add("item");
 	$item.style.height = `${item.height}px`;
+	$item.setAttribute("lazyload", "on");
 
 	if (SHOW_IMAGES) {
 		$item.src = item.image;

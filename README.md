@@ -88,12 +88,28 @@ The `collock` attribute locks the columns. When the columns are locked, the layo
 </masonry-layout>
 ```
 
+### Change debounce time
+
+The `debounce` attribute specifies the amount of time in ms the layout reflow debounces each time the size of the masonry layout changes. This reflow is debounced to avoid the layout algorithm being invoked too many times in a row. The default value is `300ms`.
+
+```html
+<masonry-layout debounce="500">
+	...
+</masonry-layout>
+```
+
 ## Trigger layout
 
 If you want to force layout to can simply call the `layout()` function on the masonry layout.
 
 ```js
 document.querySelector("masonry-layout").layout();
+```
+
+If you wish to debounce the layout you can call the `scheduleLayout()` function instead.
+
+```js
+document.querySelector("masonry-layout").scheduleLayout();
 ```
 
 ## Note!
