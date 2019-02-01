@@ -1,4 +1,4 @@
-import { ColHeightMap, createEmptyColHeightMap, debounce, DEFAULT_COLS, DEFAULT_DEBOUNCE_MS, DEFAULT_MAX_COL_WIDTH, DEFAULT_SPACING, DISTRIBUTED_ATTR, getBooleanAttribute, getColCount, getColWidth, getNumberAttribute, getShortestCol, itemPosition, LAYOUT_DEBOUNCE_MS, MasonryCols, MasonryItemLayout, setBooleanAttribute, tallestColHeight } from "./masonry-helpers";
+import { ColHeightMap, createEmptyColHeightMap, debounce, DEFAULT_COLS, DEFAULT_DEBOUNCE_MS, DEFAULT_MAX_COL_WIDTH, DEFAULT_SPACING, DISTRIBUTED_ATTR, getBooleanAttribute, getColCount, getColWidth, getNumberAttribute, getShortestCol, itemPosition, MasonryCols, MasonryItemLayout, setBooleanAttribute, tallestColHeight } from "./masonry-helpers";
 
 declare interface ResizeObserver {
 	observe (target: Element): void;
