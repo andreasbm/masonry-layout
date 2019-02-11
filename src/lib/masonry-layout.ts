@@ -281,3 +281,8 @@ export class MasonryLayout extends HTMLElement {
 
 window.customElements.define("masonry-layout", MasonryLayout);
 
+declare global {
+	interface HTMLElementTagNameMap {
+		"masonry-layout": MasonryLayout;
+	}
+}
