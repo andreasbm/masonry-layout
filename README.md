@@ -1,18 +1,26 @@
-# @appnest/masonry-layout
-
 <h1 align="center">@appnest/masonry-layout</h1>
 <p align="center">
-  <a href="https://npmcharts.com/compare/@appnest/masonry-layout?minimal=true"><img alt="Downloads per month" src="https://img.shields.io/npm/dm/@appnest/masonry-layout.svg" height="20"></img></a>
+  <a href="https://npmcharts.com/compare/@appnest/masonry-layout?minimal=true">
+    <img alt="Downloads per month" src="https://img.shields.io/npm/dm/@appnest/masonry-layout.svg" height="20"></img>
+  </a>
   <a href="https://david-dm.org/andreasbm/masonry-layout"><img alt="Dependencies" src="https://img.shields.io/david/andreasbm/masonry-layout.svg" height="20"></img></a>
-  <a href="https://www.npmjs.com/package/@appnest/masonry-layout"><img alt="NPM Version" src="https://img.shields.io/npm/v/@appnest/masonry-layout.svg" height="20"></img></a>
-  <a href="https://github.com/andreasbm/masonry-layout/graphs/contributors"><img alt="Contributors" src="https://img.shields.io/github/contributors/andreasbm/masonry-layout.svg" height="20"></img></a>
-  <a href="https://opensource.org/licenses/MIT"><img alt="MIT License" src="https://img.shields.io/badge/License-MIT-yellow.svg" height="20"></img></a>
-  [![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/@appnest/masonry-layout)
+  <a href="https://www.npmjs.com/package/@appnest/masonry-layout">
+    <img alt="NPM Version" src="https://img.shields.io/npm/v/@appnest/masonry-layout.svg" height="20"></img>
+  </a>
+  <a href="https://github.com/andreasbm/masonry-layout/graphs/contributors">
+    <img alt="Contributors" src="https://img.shields.io/github/contributors/andreasbm/masonry-layout.svg" height="20"></img>
+  </a>
+  <a href="https://opensource.org/licenses/MIT">
+    <img alt="MIT License" src="https://img.shields.io/badge/License-MIT-yellow.svg" height="20"></img>
+  </a>
+  <a href="https://www.webcomponents.org/element/@appnest/masonry-layout">
+    <img alt="Published on webcomponents.org" src="https://img.shields.io/badge/webcomponents.org-published-blue.svg" height="20"></img>
+  </a>
 </p>
 
 <p align="center">
   <b>An efficient and fast web component that gives you a beautiful masonry layout</b></br>
-  <sub>Go here to see a demo [https://appnest-demo.firebaseapp.com/masonry-layout](https://appnest-demo.firebaseapp.com/masonry-layout).sub>
+  <sub>Go here to see a demo <a href="https://appnest-demo.firebaseapp.com/masonry-layout">https://appnest-demo.firebaseapp.com/masonry-layout</a>.<sub>
 </p>
 
 <br />
