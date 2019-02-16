@@ -46,9 +46,27 @@
 		"s:dev": "rollup -c --watch --environment NODE_ENV:dev",
 		"s:prod": "rollup -c --watch --environment NODE_ENV:prod",
 		"s": "npm run s:dev",
-		"deploy": "npm run b:demo:prod && firebase deploy"
+		"deploy": "npm run b:demo:prod && firebase deploy",
+		"readme": "node node_modules/.bin/readme"
 	},
 	"devDependencies": {
+		"@appnest/readme": "^1.0.2",
 		"@appnest/web-config": "0.3.11"
+	},
+	"readme": {
+		"ids": {
+			"npm": "@appnest/masonry-layout",
+			"webcomponents": "@appnest/masonry-layout",
+			"github": "andreasbm/masonry-layout"
+		},
+		"demo": "https://appnest-demo.firebaseapp.com/masonry-layout",
+		"bullets": [
+			"**Simple:** Works right out of the box (just add it to your markup)",
+			"**Lightweight:** Super small (1.5kb minified & gzipped)",
+			"**Zero dependencies:** Created using only vanilla js - no dependencies and framework agnostic!",
+			"**Customizable:** Can customize almost everything (eg. columns, transitions, spacing).",
+			"**User friendly:** Automatically re-distribute items when the size of the grid changes or new elements are added",
+			"**Performant:** Efficient & fast"
+		]
 	}
 }
