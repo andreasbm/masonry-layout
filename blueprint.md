@@ -1,5 +1,7 @@
 {{ template:title }}
+
 {{ template:badges }}
+
 {{ template:description }}
 
 {{ template:bullets }}
