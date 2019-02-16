@@ -1,6 +1,7 @@
 {{ template:title }}
 {{ template:badges }}
 {{ template:description }}
+
 {{ template:bullets }}
 
 <img src="https://raw.githubusercontent.com/andreasbm/masonry-layout/master/example.gif" width="600">

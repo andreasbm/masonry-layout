@@ -12,6 +12,7 @@
 </p>
 
 <br />
+
 * **Simple:** Works right out of the box (just add it to your markup)
 * **Lightweight:** Super small (1.5kb minified & gzipped)
 * **Zero dependencies:** Created using only vanilla js - no dependencies and framework agnostic!
