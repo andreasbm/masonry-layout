@@ -4,9 +4,11 @@
 
 {{ template:description }}
 
-{{ template:bullets }}
+<p align="center">
+	<img src="https://raw.githubusercontent.com/andreasbm/masonry-layout/master/example.gif" width="600">
+</p>
 
-<img src="https://raw.githubusercontent.com/andreasbm/masonry-layout/master/example.gif" width="600">
+{{ readme.bullets }}
 
 ## Installation
 

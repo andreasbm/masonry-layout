@@ -8,12 +8,18 @@
 <a href="https://www.webcomponents.org/element/@appnest/masonry-layout"><img alt="Published on webcomponents.org" src="https://img.shields.io/badge/webcomponents.org-published-blue.svg" height="20"/></a>
 	</p>
 
+
 <p align="center">
   <b>An efficient and fast web component that gives you a beautiful masonry layout</b></br>
   <sub> Go here to see a demo <a href="https://appnest-demo.firebaseapp.com/masonry-layout">https://appnest-demo.firebaseapp.com/masonry-layout</a>.<sub>
 </p>
 
 <br />
+
+
+<p align="center">
+	<img src="https://raw.githubusercontent.com/andreasbm/masonry-layout/master/example.gif" width="600">
+</p>
 
 * **Simple:** Works right out of the box (just add it to your markup)
 * **Lightweight:** Super small (1.5kb minified & gzipped)
@@ -22,19 +28,19 @@
 * **User friendly:** Automatically re-distribute items when the size of the grid changes or new elements are added
 * **Performant:** Efficient & fast
 
-<img src="https://raw.githubusercontent.com/andreasbm/masonry-layout/master/example.gif" width="600">
 
-![line](https://raw.githubusercontent.com/andreasbm/readme/master/assets/line.png)
+![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
 
-## ❯ Installation
+## ➤ Installation
 
 ```javascript
 npm i @appnest/masonry-layout
 ```
 
-![line](https://raw.githubusercontent.com/andreasbm/readme/master/assets/line.png)
 
-## ❯ Example
+![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
+
+## ➤ Example
 
 Import `@appnest/masonry-layout` somewhere in your code and you're ready to go! Simply add the masonry layout to your `html` and you'll be singing and dancing from not having to build the masonry layout yourself.
 
@@ -48,9 +54,10 @@ Import `@appnest/masonry-layout` somewhere in your code and you're ready to go! 
 </masonry-layout>
 ```
 
-![line](https://raw.githubusercontent.com/andreasbm/readme/master/assets/line.png)
 
-## ❯ Customize
+![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
+
+## ➤ Customize
 
 Customize the functionality by applying the attributes.
 
@@ -104,9 +111,10 @@ The `debounce` attribute specifies the amount of time in ms the layout reflow de
 </masonry-layout>
 ```
 
-![line](https://raw.githubusercontent.com/andreasbm/readme/master/assets/line.png)
 
-## ❯ Trigger layout
+![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
+
+## ➤ Trigger layout
 
 If you want to force layout to can simply call the `layout()` function on the masonry layout.
 
@@ -120,15 +128,17 @@ If you wish to debounce the layout you can call the `scheduleLayout()` function 
 document.querySelector("masonry-layout").scheduleLayout();
 ```
 
-![line](https://raw.githubusercontent.com/andreasbm/readme/master/assets/line.png)
 
-## ❯ ResizeObserver
+![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
+
+## ➤ ResizeObserver
 
 You might want to polyfill the `ResizeObserver`. The observer in the component makes sure to distribute the items whenever the size of the grid changes. If this is not polyfilled you will have to call the `layout()` function yourself when the height of the grid changes. If no `ResizeObserver` can be found on the `window` object it will instead re-distribute items when the size of the window changes.
 
-![line](https://raw.githubusercontent.com/andreasbm/readme/master/assets/line.png)
 
-## ❯ License
+![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
+
+## ➤ License
 	
 Licensed under [MIT](https://opensource.org/licenses/MIT).
 

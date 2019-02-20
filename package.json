@@ -50,10 +50,11 @@
 		"readme": "node node_modules/.bin/readme"
 	},
 	"devDependencies": {
-		"@appnest/readme": "^1.0.2",
-		"@appnest/web-config": "0.3.11"
+		"@appnest/readme": "^1.0.18",
+		"@appnest/web-config": "0.3.21"
 	},
 	"readme": {
+		"line": "rainbow",
 		"ids": {
 			"npm": "@appnest/masonry-layout",
 			"webcomponents": "@appnest/masonry-layout",
