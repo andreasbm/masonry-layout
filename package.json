@@ -51,6 +51,6 @@
 	},
 	"devDependencies": {
 		"@appnest/readme": "^1.1.1",
-		"@appnest/web-config": "0.3.25"
+		"@appnest/web-config": "0.3.26"
 	}
 }
