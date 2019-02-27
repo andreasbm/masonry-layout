@@ -8,7 +8,7 @@
 	<img src="https://raw.githubusercontent.com/andreasbm/masonry-layout/master/example.gif" width="600">
 </p>
 
-{{ readme.bullets }}
+{{ bullets }}
 
 ## Installation
 
