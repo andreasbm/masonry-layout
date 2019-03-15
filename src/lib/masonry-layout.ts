@@ -95,7 +95,7 @@ export class MasonryLayout extends HTMLElement {
 	}
 
 	/**
-	 * The spacing between the columns
+	 * The spacing in pixels between the columns.
 	 * @attr spacing
 	 * @param v
 	 */
@@ -134,7 +134,7 @@ export class MasonryLayout extends HTMLElement {
 	}
 
 	/**
-	 * The ms of debounce when the element resizes
+	 * The ms of debounce when the element resizes.
 	 * @attr debounce
 	 * @param v
 	 */
