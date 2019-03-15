@@ -129,6 +129,40 @@ document.querySelector("masonry-layout").scheduleLayout();
 ```
 
 
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)](#overview)
+
+## ➤ Overview
+
+Here's a complete overview of the component.
+
+### masonry-layout
+
+Masonry layout web component.
+#### Properties
+
+| Property      | Attribute     | Type          | Description                                      |
+|---------------|---------------|---------------|--------------------------------------------------|
+| `colLock`     | `collock`     | `boolean`     | Whether the items should be locked in their columns after the have been placed. |
+| `cols`        | `cols`        | `MasonryCols` | The amount of columns.                           |
+| `debounce`    | `debounce`    | `number`      | The ms of debounce when the element resizes      |
+| `maxColWidth` | `maxcolwidth` | `number`      | The maximum width of each column if cols are set to auto. |
+| `spacing`     | `spacing`     | `number`      | The spacing between the columns                  |
+| `transition`  | `transition`  | `boolean`     | Whether the items should have a transition.      |
+
+#### CSS Custom Properties
+
+| Property                           | Description            |
+|------------------------------------|------------------------|
+| `--masonry-layout-item-transition` | Transition of an item. |
+
+#### Slots
+
+| Name | Description                                     |
+|------|-------------------------------------------------|
+|      | Items that should be distributed in the layout. |
+
+
+
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)](#resizeobserver)
 
 ## ➤ ResizeObserver

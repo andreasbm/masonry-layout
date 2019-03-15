@@ -50,7 +50,7 @@
 		"readme": "node node_modules/.bin/readme"
 	},
 	"devDependencies": {
-		"@appnest/readme": "^1.1.1",
-		"@appnest/web-config": "0.3.26"
+		"@appnest/readme": "^1.1.20",
+		"@appnest/web-config": "0.3.35"
 	}
 }

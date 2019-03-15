@@ -98,6 +98,12 @@ If you wish to debounce the layout you can call the `scheduleLayout()` function 
 document.querySelector("masonry-layout").scheduleLayout();
 ```
 
+## Overview
+
+Here's a complete overview of the component.
+
+{{ doc:src/lib/masonry-layout.ts }}
+
 ## ResizeObserver
 
 You might want to polyfill the `ResizeObserver`. The observer in the component makes sure to distribute the items whenever the size of the grid changes. If this is not polyfilled you will have to call the `layout()` function yourself when the height of the grid changes. If no `ResizeObserver` can be found on the `window` object it will instead re-distribute items when the size of the window changes.

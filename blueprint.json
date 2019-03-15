@@ -13,5 +13,12 @@
 		"**Customizable:** Can customize almost everything (eg. columns, transitions, spacing).",
 		"**User friendly:** Automatically re-distribute items when the size of the grid changes or new elements are added",
 		"**Performant:** Efficient & fast"
-	]
+	],
+	"documentationConfig": {
+		"format": "md",
+		"debug": false,
+		"markdown": {
+			"titleLevel": 3
+		}
+	}
 }

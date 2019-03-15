@@ -1,5 +1,8 @@
 import { ColHeightMap, createEmptyColHeightMap, debounce, DEFAULT_COLS, DEFAULT_DEBOUNCE_MS, DEFAULT_MAX_COL_WIDTH, DEFAULT_SPACING, DISTRIBUTED_ATTR, getBooleanAttribute, getColCount, getColWidth, getNumberAttribute, getShortestCol, itemPosition, MasonryCols, MasonryItemLayout, setBooleanAttribute, tallestColHeight } from "./masonry-helpers";
 
+/**
+ * Typings required for the resize observer.
+ */
 declare interface ResizeObserver {
 	observe (target: Element): void;
 	unobserve (target: Element): void;
@@ -7,20 +10,19 @@ declare interface ResizeObserver {
 }
 
 declare type ResizeObserverConstructor = new (callback: (() => void)) => ResizeObserver;
-
 declare const ResizeObserver: ResizeObserverConstructor;
 
+/**
+ * Template for the masonry layout.
+ */
 const template = document.createElement("template");
 template.innerHTML = `
 	<style>
 		:host {
-			--masonry-layout-item-transition: transform 200ms ease;
-			
 			display: block;
 			position: relative;
 			visibility: hidden;
 			transform: translate3d(0, 0, 0);
-			
 		}
 
 		::slotted(*) {
@@ -34,12 +36,18 @@ template.innerHTML = `
 		
 		/* Apply the transition after the items have been distributed */
 		:host([data-masonry-distributed][transition]) ::slotted([data-masonry-distributed]) {
-			transition: var(--masonry-layout-item-transition);
+			transition: var(--masonry-layout-item-transition, transform 200ms ease);
 		}
 	</style>
 	<slot id="slot"></slot>
 `;
 
+/**
+ * Masonry layout web component.
+ * @example <masonry-layout><div class="item"></div><div class="item"></div></masonry-layout>
+ * @slot - Items that should be distributed in the layout.
+ * @cssprop --masonry-layout-item-transition - Transition of an item.
+ */
 export class MasonryLayout extends HTMLElement {
 
 	// The observed attributes.
@@ -60,7 +68,11 @@ export class MasonryLayout extends HTMLElement {
 	private cancelNextResizeEvent = false;
 	private itemCache: WeakMap<HTMLElement, MasonryItemLayout> = new WeakMap<HTMLElement, MasonryItemLayout>();
 
-	// The maximum width of each column if cols are set to auto.
+	/**
+	 * The maximum width of each column if cols are set to auto.
+	 * @attr maxcolwidth
+	 * @param v
+	 */
 	set maxColWidth (v: number) {
 		this.setAttribute("maxcolwidth", v.toString());
 	}
@@ -69,7 +81,11 @@ export class MasonryLayout extends HTMLElement {
 		return getNumberAttribute(this, "maxcolwidth", DEFAULT_MAX_COL_WIDTH);
 	}
 
-	// Whether the items should be locked in their columns after the have been placed.
+	/**
+	 * Whether the items should be locked in their columns after the have been placed.
+	 * @attr collock
+	 * @param v
+	 */
 	set colLock (v: boolean) {
 		setBooleanAttribute(this, "collock", v);
 	}
@@ -78,7 +94,11 @@ export class MasonryLayout extends HTMLElement {
 		return getBooleanAttribute(this, "collock");
 	}
 
-	// The spacing between the columns
+	/**
+	 * The spacing between the columns
+	 * @attr spacing
+	 * @param v
+	 */
 	set spacing (v: number) {
 		this.setAttribute("spacing", v.toString());
 	}
@@ -87,7 +107,11 @@ export class MasonryLayout extends HTMLElement {
 		return getNumberAttribute(this, "spacing", DEFAULT_SPACING);
 	}
 
-	// The amount of columns.
+	/**
+	 * The amount of columns.
+	 * @attr cols
+	 * @param v
+	 */
 	set cols (v: MasonryCols) {
 		this.setAttribute("cols", v.toString());
 	}
@@ -96,7 +120,11 @@ export class MasonryLayout extends HTMLElement {
 		return getNumberAttribute(this, "cols", DEFAULT_COLS);
 	}
 
-	// Whether the items should have a transition.
+	/**
+	 * Whether the items should have a transition.
+	 * @attr transition
+	 * @param v
+	 */
 	set transition (v: boolean) {
 		setBooleanAttribute(this, "transition", v);
 	}
@@ -105,7 +133,11 @@ export class MasonryLayout extends HTMLElement {
 		return getBooleanAttribute(this, "transition");
 	}
 
-	// The ms of debounce when the element resizes
+	/**
+	 * The ms of debounce when the element resizes
+	 * @attr debounce
+	 * @param v
+	 */
 	set debounce (v: number) {
 		this.setAttribute("debounce", v.toString());
 	}
