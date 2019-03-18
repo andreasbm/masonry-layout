@@ -12,6 +12,10 @@ declare interface ResizeObserver {
 declare type ResizeObserverConstructor = new (callback: (() => void)) => ResizeObserver;
 declare const ResizeObserver: ResizeObserverConstructor;
 
+declare global {
+	interface Window { ShadyCSS: any; }
+}
+
 /**
  * Template for the masonry layout.
  */
@@ -41,6 +45,9 @@ template.innerHTML = `
 	</style>
 	<slot id="slot"></slot>
 `;
+
+// Use polyfill only in browsers that lack native Shadow DOM.
+window.ShadyCSS && window.ShadyCSS.prepareTemplate(template, "masonry-layout");
 
 /**
  * Masonry layout web component.
@@ -179,6 +186,7 @@ export class MasonryLayout extends HTMLElement {
 	 * Attaches the listeners when the element is added to the DOM.
 	 */
 	connectedCallback () {
+		window.ShadyCSS && window.ShadyCSS.styleElement(this);
 		this.attachListeners();
 	}
 

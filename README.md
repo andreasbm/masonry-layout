@@ -138,15 +138,16 @@ Here's a complete overview of the component.
 ### masonry-layout
 
 Masonry layout web component.
+
 #### Properties
 
 | Property      | Attribute     | Type          | Description                                      |
 |---------------|---------------|---------------|--------------------------------------------------|
 | `colLock`     | `collock`     | `boolean`     | Whether the items should be locked in their columns after the have been placed. |
 | `cols`        | `cols`        | `MasonryCols` | The amount of columns.                           |
-| `debounce`    | `debounce`    | `number`      | The ms of debounce when the element resizes      |
+| `debounce`    | `debounce`    | `number`      | The ms of debounce when the element resizes.     |
 | `maxColWidth` | `maxcolwidth` | `number`      | The maximum width of each column if cols are set to auto. |
-| `spacing`     | `spacing`     | `number`      | The spacing between the columns                  |
+| `spacing`     | `spacing`     | `number`      | The spacing in pixels between the columns.       |
 | `transition`  | `transition`  | `boolean`     | Whether the items should have a transition.      |
 
 #### CSS Custom Properties

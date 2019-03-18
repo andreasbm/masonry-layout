@@ -1,5 +1,3 @@
-import path from "path";
-import pkg from "./package.json";
 import {
 	defaultExternals,
 	defaultOutputConfig,
@@ -10,6 +8,8 @@ import {
 	isProd,
 	isServe
 } from "@appnest/web-config";
+import path from "path";
+import pkg from "./package.json";
 
 const folders = {
 	dist: path.resolve(__dirname, "dist"),
@@ -45,6 +45,9 @@ export default {
 			htmlTemplateConfig: {
 				template: files.src_index,
 				target: files.dist_index,
+				polyfillConfig: {
+					features: ["es", "template", "shadow-dom", "custom-elements"]
+				},
 				include: /main(-.*)?\.js$/
 			}
 		}),
