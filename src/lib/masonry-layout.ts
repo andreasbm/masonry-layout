@@ -172,10 +172,6 @@ export class MasonryLayout extends HTMLElement {
 	constructor () {
 		super();
 
-		// Attach the shadow root
-		const shadow = this.attachShadow({mode: "open"});
-		shadow.appendChild(template.content.cloneNode(true));
-
 		// Bind the relevant functions to the element
 		this.scheduleLayout = this.scheduleLayout.bind(this);
 		this.layout = this.layout.bind(this);
@@ -187,6 +183,13 @@ export class MasonryLayout extends HTMLElement {
 	 */
 	connectedCallback () {
 		window.ShadyCSS && window.ShadyCSS.styleElement(this);
+		if (!this.shadowRoot) {
+
+			// Attach the shadow root
+			const shadow = this.attachShadow({mode: "open"});
+			shadow.appendChild(template.content.cloneNode(true));
+		}
+
 		this.attachListeners();
 	}
 
