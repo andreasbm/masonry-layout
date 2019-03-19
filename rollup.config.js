@@ -34,7 +34,7 @@ export default {
 	],
 	plugins: [
 		...defaultPlugins({
-			cleanerConfig: {
+			cleanConfig: {
 				targets: [
 					folders.dist
 				]
