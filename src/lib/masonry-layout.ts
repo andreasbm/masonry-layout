@@ -73,7 +73,7 @@ export class MasonryLayout extends HTMLElement {
 	private currentColHeightMap: ColHeightMap = [];
 	private ro: ResizeObserver | undefined = undefined;
 	private cancelNextResizeEvent = false;
-	private itemCache: WeakMap<HTMLElement, MasonryItemLayout> = new WeakMap<HTMLElement, MasonryItemLayout>();
+	private layoutCache: WeakMap<HTMLElement, MasonryItemLayout> = new WeakMap<HTMLElement, MasonryItemLayout>();
 
 	/**
 	 * The maximum width of each column if cols are set to auto.
@@ -161,11 +161,12 @@ export class MasonryLayout extends HTMLElement {
 	}
 
 	/**
-	 * All of the elements in the slot that are not text nodes.
+	 * All of the elements in the slot that are an Node.ELEMENT_NODE.
+	 * https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeType
 	 */
 	private get $items (): HTMLElement[] {
 		return this.$slot.assignedNodes().filter(node => {
-			return node.nodeName !== "#text";
+			return node.nodeType === 1;
 		}) as HTMLElement[];
 	}
 
@@ -278,7 +279,7 @@ export class MasonryLayout extends HTMLElement {
 			for (const [i, $item] of $items.entries()) {
 
 				// Find the shortest col (we need to prioritize filling that one) or used the existing (locked) one
-				const currentLayout = this.itemCache.get($item);
+				const currentLayout = this.layoutCache.get($item);
 				const col = colLock && !reorderCols && currentLayout != null ? currentLayout.col : getShortestCol(colHeightMap);
 
 				// Compute the position for the item
@@ -287,7 +288,7 @@ export class MasonryLayout extends HTMLElement {
 				// Check if the layout has changed
 				if (currentLayout == null ||
 					(currentLayout.colWidth !== colWidth || currentLayout.left !== left || currentLayout.top !== top || currentLayout.col !== col)) {
-					this.itemCache.set($item, {left, top, col, colWidth});
+					this.layoutCache.set($item, {left, top, col, colWidth});
 
 					// WRITE: Assign the new position.
 					Object.assign($item.style, {

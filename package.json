@@ -41,9 +41,9 @@
 		"deploy": "npm run b:demo:prod && firebase deploy",
 		"readme": "node node_modules/.bin/readme generate",
 		"postversion": "npm run readme && npm run b:lib",
-		"publish:patch": "np patch --contents=dist",
-		"publish:minor": "np minor --contents=dist",
-		"publish:major": "np major --contents=dist"
+		"publish:patch": "np patch --contents=dist --no-cleanup",
+		"publish:minor": "np minor --contents=dist --no-cleanup",
+		"publish:major": "np major --contents=dist --no-cleanup"
 	},
 	"devDependencies": {
 		"@appnest/readme": "^1.2.3",
