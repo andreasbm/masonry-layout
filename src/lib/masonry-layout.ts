@@ -19,7 +19,7 @@ declare global {
 /**
  * Template for the masonry layout.
  */
-const template = document.createElement("template");
+const template = document.createElement("template") as HTMLTemplateElement;
 template.innerHTML = `
 	<style>
 		:host {
@@ -47,7 +47,7 @@ template.innerHTML = `
 `;
 
 // Use polyfill only in browsers that lack native Shadow DOM.
-window.ShadyCSS && window.ShadyCSS.prepareTemplate(template, "masonry-layout");
+window.ShadyCSS && window.ShadyCSS.prepareTemplateStyles(template, "masonry-layout");
 
 /**
  * Masonry layout web component.

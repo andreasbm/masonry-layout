@@ -45,6 +45,7 @@ export default {
 			htmlTemplateConfig: {
 				template: files.src_index,
 				target: files.dist_index,
+				scriptType: "text/javascript",
 				polyfillConfig: {
 					features: ["es", "template", "shadow-dom", "custom-elements"]
 				},
