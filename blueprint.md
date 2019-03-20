@@ -16,7 +16,7 @@
 npm i @appnest/masonry-layout
 ```
 
-If you prefer to use `umd` bundle you can load `https://unpkg.com/@appnest/masonry-layout@0.0.18/umd/masonry-layout.min.js` instead.
+If you prefer to use `umd` bundle you can load `https://unpkg.com/@appnest/masonry-layout/umd/masonry-layout.min.js` instead.
 
 ## Example
 
