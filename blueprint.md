@@ -16,6 +16,8 @@
 npm i @appnest/masonry-layout
 ```
 
+If you prefer to use `umd` bundle you can load `https://unpkg.com/@appnest/masonry-layout@0.0.18/umd/masonry-layout.min.js` instead.
+
 ## Example
 
 Import `@appnest/masonry-layout` somewhere in your code and you're ready to go! Simply add the masonry layout to your `html` and you'll be singing and dancing from not having to build the masonry layout yourself.

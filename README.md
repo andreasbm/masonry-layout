@@ -37,6 +37,8 @@
 npm i @appnest/masonry-layout
 ```
 
+If you prefer to use `umd` bundle you can load `https://unpkg.com/@appnest/masonry-layout@0.0.18/umd/masonry-layout.min.js` instead.
+
 
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)](#example)
 
@@ -137,7 +139,8 @@ Here's a complete overview of the component.
 
 ### masonry-layout
 
-Masonry layout web component.
+Masonry layout web component. It places the slotted elements in the optimal position based
+on the available vertical space, just like mason fitting stones in a wall.
 
 #### Properties
 
