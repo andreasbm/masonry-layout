@@ -32,7 +32,7 @@
 	"scripts": {
 		"start": "npm run s",
 		"ncu": "ncu -u -a && npm update && npm install",
-		"b:lib": "node pre-build.js && tsc -p tsconfig.build.json",
+		"b:lib": "node pre-build.js && tsc -p tsconfig.build.json && rollup -c rollup-build.config.ts",
 		"b:demo:dev": "rollup -c rollup.config.ts --environment NODE_ENV:dev",
 		"b:demo:prod": "rollup -c rollup.config.ts --environment NODE_ENV:prod",
 		"s:dev": "rollup -c rollup.config.ts --watch --environment NODE_ENV:dev",

@@ -13,7 +13,7 @@ declare type ResizeObserverConstructor = new (callback: (() => void)) => ResizeO
 declare const ResizeObserver: ResizeObserverConstructor;
 
 declare global {
-	interface Window { ShadyCSS: any; }
+	interface Window {ShadyCSS: any;}
 }
 
 /**
@@ -50,7 +50,8 @@ template.innerHTML = `
 window.ShadyCSS && window.ShadyCSS.prepareTemplateStyles(template, "masonry-layout");
 
 /**
- * Masonry layout web component.
+ * Masonry layout web component. It places the slotted elements in the optimal position based
+ * on the available vertical space, just like mason fitting stones in a wall.
  * @example <masonry-layout><div class="item"></div><div class="item"></div></masonry-layout>
  * @slot - Items that should be distributed in the layout.
  * @cssprop --masonry-layout-item-transition - Transition of an item.
