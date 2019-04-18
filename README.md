@@ -24,7 +24,7 @@
 * **Simple:** Works right out of the box (just add it to your markup)
 * **Lightweight:** Super small (1.5kb minified & gzipped)
 * **Zero dependencies:** Created using only vanilla js - no dependencies and framework agnostic!
-* **Customizable:** Can customize almost everything (eg. columns, transitions, spacing).
+* **Customizable:** Can customize almost everything (eg. columns, transitions, gap).
 * **User friendly:** Automatically re-distribute items when the size of the grid changes or new elements are added
 * **Performant:** Efficient & fast
 
@@ -73,12 +73,12 @@ The `cols` attribute specifies the amount of columns. The default value is `auto
 </masonry-layout>
 ```
 
-### Spacing between items
+### Gap between columns and rows
 
-The `spacing` attribute specifies how many pixels the spacing between the elements should be. The default value is `24px`.
+The `gap` attribute specifies how many pixels the gap between the elements should be. The default value is `24px`.
 
 ```html
-<masonry-layout spacing="50">
+<masonry-layout gap="50">
   ...
 </masonry-layout>
 ```
@@ -149,8 +149,8 @@ on the available vertical space, just like mason fitting stones in a wall.
 | `colLock`     | `collock`     | `boolean`     | Whether the items should be locked in their columns after the have been placed. |
 | `cols`        | `cols`        | `MasonryCols` | The amount of columns.                           |
 | `debounce`    | `debounce`    | `number`      | The ms of debounce when the element resizes.     |
+| `gap`         | `gap`         | `number`      | The gap in pixels between the columns.           |
 | `maxColWidth` | `maxcolwidth` | `number`      | The maximum width of each column if cols are set to auto. |
-| `spacing`     | `spacing`     | `number`      | The spacing in pixels between the columns.       |
 | `transition`  | `transition`  | `boolean`     | Whether the items should have a transition.      |
 
 #### CSS Custom Properties

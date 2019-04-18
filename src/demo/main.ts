@@ -8,7 +8,7 @@ const $toggleColLockButton = document.querySelector<HTMLButtonElement>("#toggle_
 const $toggleTransitionButton = document.querySelector<HTMLButtonElement>("#toggle_transition_button")!;
 const $addButton = document.querySelector<HTMLButtonElement>("#add_button")!;
 const $colCountButton = document.querySelector<HTMLButtonElement>("#col_count_button")!;
-const $spacingButton = document.querySelector<HTMLButtonElement>("#spacing_button")!;
+const $gapButton = document.querySelector<HTMLButtonElement>("#gap_button")!;
 
 /**
  * Returns a random height.
@@ -69,8 +69,8 @@ function addNewItem (): HTMLImageElement {
 
 	const $item: HTMLImageElement = document.createElement("img");
 	$item.classList.add("item");
+	$item.setAttribute("loading", "lazy");
 	$item.style.height = `${item.height}px`;
-	$item.setAttribute("lazyload", "on");
 
 	if (SHOW_IMAGES) {
 		$item.src = item.image;
@@ -115,9 +115,9 @@ $colCountButton.addEventListener("click", () => {
 	$masonry.cols = isNaN(<any>res) ? "auto" : Math.max(0, Math.min(parseInt(res), 30));
 });
 
-$spacingButton.addEventListener("click", () => {
-	const res = prompt("Enter the amount of spacing (enter nothing for '24')") || "";
-	$masonry.spacing = isNaN(<any>res) ? 24 : parseInt(res);
+$gapButton.addEventListener("click", () => {
+	const res = prompt("Enter the gap size in pixels (default value is '24')") || "";
+	$masonry.gap = isNaN(<any>res) ? 24 : parseInt(res);
 });
 
 initialize();

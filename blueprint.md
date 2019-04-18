@@ -46,12 +46,12 @@ The `cols` attribute specifies the amount of columns. The default value is `auto
 </masonry-layout>
 ```
 
-### Spacing between items
+### Gap between columns and rows
 
-The `spacing` attribute specifies how many pixels the spacing between the elements should be. The default value is `24px`.
+The `gap` attribute specifies how many pixels the gap between the elements should be. The default value is `24px`.
 
 ```html
-<masonry-layout spacing="50">
+<masonry-layout gap="50">
   ...
 </masonry-layout>
 ```

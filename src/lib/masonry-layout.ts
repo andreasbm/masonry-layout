@@ -1,4 +1,4 @@
-import { ColHeightMap, createEmptyColHeightMap, debounce, DEFAULT_COLS, DEFAULT_DEBOUNCE_MS, DEFAULT_MAX_COL_WIDTH, DEFAULT_SPACING, DISTRIBUTED_ATTR, getBooleanAttribute, getColCount, getColWidth, getNumberAttribute, getShortestCol, itemPosition, MasonryCols, MasonryItemLayout, setBooleanAttribute, tallestColHeight } from "./masonry-helpers";
+import { ColHeightMap, createEmptyColHeightMap, debounce, DEFAULT_COLS, DEFAULT_DEBOUNCE_MS, DEFAULT_MAX_COL_WIDTH, DEFAULT_GAP, DISTRIBUTED_ATTR, getBooleanAttribute, getColCount, getColWidth, getNumberAttribute, getShortestCol, itemPosition, MasonryCols, MasonryItemLayout, setBooleanAttribute, tallestColHeight } from "./masonry-helpers";
 
 /**
  * Typings required for the resize observer.
@@ -13,7 +13,7 @@ declare type ResizeObserverConstructor = new (callback: (() => void)) => ResizeO
 declare const ResizeObserver: ResizeObserverConstructor;
 
 declare global {
-	interface Window {ShadyCSS: any;}
+	interface Window {ShadyCSS?: any;}
 }
 
 /**
@@ -64,7 +64,7 @@ export class MasonryLayout extends HTMLElement {
 		return [
 			"maxcolwidth",
 			"collock",
-			"spacing",
+			"gap",
 			"cols",
 			"debounce"
 		];
@@ -103,16 +103,16 @@ export class MasonryLayout extends HTMLElement {
 	}
 
 	/**
-	 * The spacing in pixels between the columns.
-	 * @attr spacing
+	 * The gap in pixels between the columns.
+	 * @attr gap
 	 * @param v
 	 */
-	set spacing (v: number) {
-		this.setAttribute("spacing", v.toString());
+	set gap (v: number) {
+		this.setAttribute("gap", v.toString());
 	}
 
-	get spacing (): number {
-		return getNumberAttribute(this, "spacing", DEFAULT_SPACING);
+	get gap (): number {
+		return getNumberAttribute(this, "gap", DEFAULT_GAP);
 	}
 
 	/**
@@ -266,10 +266,10 @@ export class MasonryLayout extends HTMLElement {
 			const totalWidth = this.offsetWidth;
 			const itemHeights = $items.map($item => $item.offsetHeight);
 
-			const spacing = this.spacing;
+			const gap = this.gap;
 			const colLock = this.colLock;
 			const colCount = getColCount(totalWidth, this.cols, this.maxColWidth);
-			const colWidth = getColWidth(totalWidth, spacing, colCount);
+			const colWidth = getColWidth(totalWidth, gap, colCount);
 			const colHeightMap = createEmptyColHeightMap(colCount);
 
 			// Check whether the amount of columns has changed.
@@ -284,7 +284,7 @@ export class MasonryLayout extends HTMLElement {
 				const col = colLock && !reorderCols && currentLayout != null ? currentLayout.col : getShortestCol(colHeightMap);
 
 				// Compute the position for the item
-				const {left, top} = itemPosition(i, colWidth, spacing, col, colCount, colHeightMap);
+				const {left, top} = itemPosition(i, colWidth, gap, col, colCount, colHeightMap);
 
 				// Check if the layout has changed
 				if (currentLayout == null ||

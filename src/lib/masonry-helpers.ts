@@ -2,7 +2,7 @@ export const MIN_HEIGHT_PRIORITY_SLACK_PX = 10;
 export const DISTRIBUTED_ATTR = "data-masonry-distributed";
 export const DEFAULT_COLS: MasonryCols = "auto";
 export const DEFAULT_MAX_COL_WIDTH = 400;
-export const DEFAULT_SPACING = 24;
+export const DEFAULT_GAP = 24;
 export const DEFAULT_DEBOUNCE_MS = 300;
 
 export type ColHeightMap = number[];
@@ -22,13 +22,13 @@ export function createEmptyColHeightMap (colCount: number): ColHeightMap {
 /**
  * Returns the width of a col.
  * The width of the column will be the total width of the element divided by the amount
- * of columns, subtracted with the total amount of spacing.
+ * of columns, subtracted with the total amount of gap.
  * @param totalWidth
- * @param spacing
+ * @param gap
  * @param colCount
  */
-export function getColWidth (totalWidth: number, spacing: number, colCount: number): number {
-	return (totalWidth / colCount) - ((spacing * (colCount - 1)) / colCount);
+export function getColWidth (totalWidth: number, gap: number, colCount: number): number {
+	return (totalWidth / colCount) - ((gap * (colCount - 1)) / colCount);
 }
 
 /**
@@ -53,27 +53,27 @@ export function tallestColHeight (colHeightMap: ColHeightMap): number {
  * Computes the position of an item.
  * @param i
  * @param width
- * @param spacing
+ * @param gap
  * @param colIndex
  * @param colCount
  * @param colHeightMap
  */
 export function itemPosition (i: number,
                               width: number,
-                              spacing: number,
+                              gap: number,
                               colIndex: number,
                               colCount: number,
                               colHeightMap: ColHeightMap): {top: number, left: number} {
 
 	// Compute the left offset of the item. We find the left offset by first computing
-	// the width of the columns added together with the spacing before the current element.
-	const left = (width * colIndex) + (spacing * colIndex);
+	// the width of the columns added together with the gap before the current element.
+	const left = (width * colIndex) + (gap * colIndex);
 
-	// If the element in the first row we need to treat it different by not adding spacing before it.
+	// If the element in the first row we need to treat it different by not adding  before it.
 	const isFirstInRow = i < colCount;
 
-	// The top offset will be the height of the chosen column added together with the spacing.
-	const top = (colHeightMap[colIndex] || 0) + (isFirstInRow ? 0 : spacing);
+	// The top offset will be the height of the chosen column added together with the gap.
+	const top = (colHeightMap[colIndex] || 0) + (isFirstInRow ? 0 : gap);
 
 	return {top, left};
 }
