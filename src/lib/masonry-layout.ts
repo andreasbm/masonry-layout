@@ -213,7 +213,7 @@ export class MasonryLayout extends HTMLElement {
 	 * Attaches all listeners to the element.
 	 */
 	private attachListeners () {
-		this.$slot.addEventListener("slotchange", this.layout);
+		this.$slot.addEventListener("slotchange", this.scheduleLayout);
 
 		if ("ResizeObserver" in window) {
 			this.ro = new ResizeObserver(this.didResize);
@@ -250,8 +250,8 @@ export class MasonryLayout extends HTMLElement {
 	 * Schedules a layout.
 	 * @param ms - The debounce time
 	 */
-	scheduleLayout (ms?: number) {
-		debounce(this.layout, ms || this.debounce, "layout");
+	scheduleLayout (ms?: number|Event) {
+		debounce(this.layout, typeof ms === "number" ? ms : this.debounce, this.layout);
 	}
 
 	/**

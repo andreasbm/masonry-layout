@@ -9,7 +9,7 @@ export type ColHeightMap = number[];
 export type MasonryCols = number | "auto";
 export type MasonryItemLayout = {top: number, left: number, col: number, colWidth: number};
 
-const DEBOUNCE_MAP: {[id: string]: number} = {};
+const DEBOUNCE_MAP = new Map<unknown, number>();
 
 /**
  * Returns an empty col height map.
@@ -84,10 +84,14 @@ export function itemPosition (i: number,
  * @param ms
  * @param id
  */
-export function debounce (cb: (() => void), ms: number, id: string) {
-	const existingTimeout = DEBOUNCE_MAP[id];
+export function debounce (cb: (() => void), ms: number, id: unknown) {
+	const existingTimeout = DEBOUNCE_MAP.get(id);
 	if (existingTimeout) window.clearTimeout(existingTimeout);
-	DEBOUNCE_MAP[id] = window.setTimeout(cb, ms);
+	const newTimeout = () => {
+		cb();
+		DEBOUNCE_MAP.delete(id);
+	};
+	DEBOUNCE_MAP.set(id, window.setTimeout(newTimeout, ms));
 }
 
 /**
