@@ -46,7 +46,7 @@
 		"publish:major": "np major --contents=dist --no-cleanup"
 	},
 	"devDependencies": {
-		"@appnest/readme": "^1.2.3",
-		"@appnest/web-config": "0.4.28"
+		"@appnest/readme": "^1.2.5",
+		"@appnest/web-config": "0.4.33"
 	}
 }
