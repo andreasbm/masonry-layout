@@ -259,7 +259,7 @@ export class MasonryLayout extends HTMLElement {
 	 */
 	layout () {
 		requestAnimationFrame(() => {
-			const $items = this.$items;
+			const $items = this.$items.filter($item => $item.offsetHeight);
 
 			// READ: To begin with we batch the reads to avoid layout trashing.
 			// The first get will most likely cause a reflow.
