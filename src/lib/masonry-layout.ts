@@ -1,4 +1,4 @@
-import { ColHeightMap, debounce, DEFAULT_COLS, DEFAULT_DEBOUNCE_MS, DEFAULT_GAP_PX, DEFAULT_MAX_COL_WIDTH, ELEMENT_NODE_TYPE, findSmallestColIndex, getColCount, getNumberAttribute, MasonryItemCachedRead } from "./masonry-helpers";
+import { COL_COUNT_CSS_VAR_NAME, ColHeightMap, debounce, DEFAULT_COLS, DEFAULT_DEBOUNCE_MS, DEFAULT_GAP_PX, DEFAULT_MAX_COL_WIDTH, ELEMENT_NODE_TYPE, findSmallestColIndex, GAP_CSS_VAR_NAME, getColCount, getNumberAttribute, MasonryItemCachedRead } from "./masonry-helpers";
 
 /**
  * Typings required for the resize observer.
@@ -34,18 +34,18 @@ $template.innerHTML = `
     }
 
     .column {
-      width: 100%;
+      width: calc((100% / var(${COL_COUNT_CSS_VAR_NAME}, 1)) - var(${GAP_CSS_VAR_NAME}, ${DEFAULT_GAP_PX}px));
       flex: 1;
       display: flex;
       flex-direction: column;
     }
 
     .column:not(:last-child) {
-      margin-right: var(--_masonry-layout-gap, ${DEFAULT_GAP_PX}px);
+      margin-right: var(${GAP_CSS_VAR_NAME}, ${DEFAULT_GAP_PX}px);
     }
 
     .column ::slotted(*) {
-      margin-bottom: var(--_masonry-layout-gap, ${DEFAULT_GAP_PX}px);
+      margin-bottom: var(${GAP_CSS_VAR_NAME}, ${DEFAULT_GAP_PX}px);
       box-sizing: border-box;
     }
 
@@ -199,7 +199,7 @@ export class MasonryLayout extends HTMLElement {
 	attributeChangedCallback (name: string) {
 		switch (name) {
 			case "gap":
-				this.style.setProperty(`--_masonry-layout-gap`, `${this.gap}px`);
+				this.style.setProperty(`${GAP_CSS_VAR_NAME}`, `${this.gap}px`);
 				break;
 		}
 
@@ -282,6 +282,9 @@ export class MasonryLayout extends HTMLElement {
 			$column.appendChild($slot);
 			this.shadowRoot!.appendChild($column);
 		}
+
+		// Set the column count so we can compute the correct width of the columns
+		this.style.setProperty(`${COL_COUNT_CSS_VAR_NAME}`, $columns.length.toString());
 	}
 
 	/**

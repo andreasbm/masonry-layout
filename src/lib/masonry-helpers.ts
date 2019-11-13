@@ -3,6 +3,9 @@ export const DEFAULT_COLS = "auto";
 export const DEFAULT_DEBOUNCE_MS = 300;
 export const DEFAULT_GAP_PX = 24;
 
+export const COL_COUNT_CSS_VAR_NAME = `--_masonry-layout-col-count`;
+export const GAP_CSS_VAR_NAME = `--_masonry-layout-gap`;
+
 // https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeType
 export const ELEMENT_NODE_TYPE = 1;
 
