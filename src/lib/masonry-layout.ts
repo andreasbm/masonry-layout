@@ -284,7 +284,7 @@ export class MasonryLayout extends HTMLElement {
 		}
 
 		// Set the column count so we can compute the correct width of the columns
-		this.style.setProperty(`${COL_COUNT_CSS_VAR_NAME}`, $columns.length.toString());
+		this.style.setProperty(`${COL_COUNT_CSS_VAR_NAME}`, colCount.toString());
 	}
 
 	/**
