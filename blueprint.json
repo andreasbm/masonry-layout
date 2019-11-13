@@ -8,11 +8,11 @@
 	"demo": "https://appnest-demo.firebaseapp.com/masonry-layout",
 	"bullets": [
 		"**Simple:** Works right out of the box (just add it to your markup)",
-		"**Lightweight:** Super small (1.5kb minified & gzipped)",
+		"**Lightweight:** Super small (1kb minified & gzipped)",
 		"**Zero dependencies:** Created using only vanilla js - no dependencies and framework agnostic!",
 		"**Customizable:** Can customize almost everything (eg. columns, transitions, gap).",
 		"**User friendly:** Automatically re-distribute items when the size of the grid changes or new elements are added",
-		"**Performant:** Efficient & fast"
+		"**Performant:** Efficient & fast (10.000 items takes 40ms for the initial layout and 10ms for the subsequent ones)"
 	],
 	"documentationConfig": {
 		"format": "md",

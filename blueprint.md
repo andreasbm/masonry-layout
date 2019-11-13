@@ -20,15 +20,15 @@ If you prefer to use `umd` bundle you can load `https://unpkg.com/@appnest/mason
 
 ## Example
 
-Import `@appnest/masonry-layout` somewhere in your code and you're ready to go! Simply add the masonry layout to your `html` and you'll be singing and dancing from not having to build the masonry layout yourself.
+Import `@appnest/masonry-layout` somewhere in your code and you're ready to go! Simply add the `masonry-layout` element to your `html` and then add your elements in between the start and closing tags.
 
 ```html
 <masonry-layout>
-  <div class="item">1</div>
-  <div class="item">2</div>
-  <div class="item">3</div>
-  <div class="item">4</div>
-  <div class="item">5</div>
+  <div>1</div>
+  <div>2</div>
+  <div>3</div>
+  <div>4</div>
+  <div>5</div>
 </masonry-layout>
 ```
 
@@ -66,16 +66,6 @@ The `maxcolwidth` specifies how many pixels a column can maximum have when the `
 </masonry-layout>
 ```
 
-### Lock columns
-
-The `collock` attribute locks the columns. When the columns are locked, the layout will only distribute on the y axis when elements change their sizes. The default value is `false`.
-
-```html
-<masonry-layout collock>
-  ...
-</masonry-layout>
-```
-
 ### Change debounce time
 
 The `debounce` attribute specifies the amount of time in ms the layout reflow debounces each time the size of the masonry layout changes. This reflow is debounced to avoid the layout algorithm being invoked too many times in a row. The default value is `300ms`.
@@ -102,13 +92,13 @@ document.querySelector("masonry-layout").scheduleLayout();
 
 ## Overview
 
-Here's a complete overview of the component.
+Here's a complete overview of the element.
 
 {{ doc:src/lib/masonry-layout.ts }}
 
 ## ResizeObserver
 
-You might want to polyfill the `ResizeObserver`. The observer in the component makes sure to distribute the items whenever the size of the grid changes. If this is not polyfilled you will have to call the `layout()` function yourself when the height of the grid changes. If no `ResizeObserver` can be found on the `window` object it will instead re-distribute items when the size of the window changes.
+You might want to polyfill the `ResizeObserver`. The observer in the element makes sure to distribute the items whenever the size of the grid changes. If this is not polyfilled you will have to call the `layout()` function yourself when the height of the grid changes. If no `ResizeObserver` can be found on the `window` object it will instead re-distribute items when the size of the window changes.
 
 {{ template:license }}
 

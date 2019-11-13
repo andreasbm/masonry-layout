@@ -2,14 +2,13 @@ import { MasonryLayout } from "../lib/masonry-layout";
 import "../lib/masonry-layout";
 
 const $masonry = document.querySelector<MasonryLayout>("#masonry")!;
-const INITIAL_ITEMS_COUNT = 200;
+const INITIAL_ITEMS_COUNT = 10000;
 const SHOW_IMAGES = false;
 
-const $toggleColLockButton = document.querySelector<HTMLButtonElement>("#toggle_col_lock_button")!;
-const $toggleTransitionButton = document.querySelector<HTMLButtonElement>("#toggle_transition_button")!;
 const $addButton = document.querySelector<HTMLButtonElement>("#add_button")!;
 const $colCountButton = document.querySelector<HTMLButtonElement>("#col_count_button")!;
 const $gapButton = document.querySelector<HTMLButtonElement>("#gap_button")!;
+const $invalidateButton = document.querySelector<HTMLButtonElement>("#invalidate_button")!;
 
 /**
  * Returns a random height.
@@ -101,16 +100,6 @@ $addButton.addEventListener("click", () => {
 	}, 100);
 });
 
-$toggleColLockButton.addEventListener("click", () => {
-	$masonry.colLock = !$masonry.colLock;
-	$toggleColLockButton.innerText = $masonry.colLock ? `Open columns` : `Lock columns`;
-});
-
-$toggleTransitionButton.addEventListener("click", () => {
-	$masonry.transition = !$masonry.transition;
-	$toggleTransitionButton.innerText = $masonry.transition ? `Remove transition` : `Apply transition`;
-});
-
 $colCountButton.addEventListener("click", () => {
 	const res = prompt("Enter the amount of columns (enter nothing for 'auto')") || "";
 	$masonry.cols = isNaN(<any>res) ? "auto" : Math.max(0, Math.min(parseInt(res), 30));
@@ -120,5 +109,10 @@ $gapButton.addEventListener("click", () => {
 	const res = prompt("Enter the gap size in pixels (default value is '24')") || "";
 	$masonry.gap = isNaN(<any>res) ? 24 : parseInt(res);
 });
+
+$invalidateButton.addEventListener("click", () => {
+	$masonry.layout(true);
+});
+
 
 initialize();

@@ -22,11 +22,11 @@
 </p>
 
 * **Simple:** Works right out of the box (just add it to your markup)
-* **Lightweight:** Super small (1.5kb minified & gzipped)
+* **Lightweight:** Super small (1kb minified & gzipped)
 * **Zero dependencies:** Created using only vanilla js - no dependencies and framework agnostic!
 * **Customizable:** Can customize almost everything (eg. columns, transitions, gap).
 * **User friendly:** Automatically re-distribute items when the size of the grid changes or new elements are added
-* **Performant:** Efficient & fast
+* **Performant:** Efficient & fast (10.000 items takes 40ms for the initial layout and 10ms for the subsequent ones)
 
 
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)](#installation)
@@ -44,15 +44,15 @@ If you prefer to use `umd` bundle you can load `https://unpkg.com/@appnest/mason
 
 ## ➤ Example
 
-Import `@appnest/masonry-layout` somewhere in your code and you're ready to go! Simply add the masonry layout to your `html` and you'll be singing and dancing from not having to build the masonry layout yourself.
+Import `@appnest/masonry-layout` somewhere in your code and you're ready to go! Simply add the `masonry-layout` element to your `html` and then add your elements in between the start and closing tags.
 
 ```html
 <masonry-layout>
-  <div class="item">1</div>
-  <div class="item">2</div>
-  <div class="item">3</div>
-  <div class="item">4</div>
-  <div class="item">5</div>
+  <div>1</div>
+  <div>2</div>
+  <div>3</div>
+  <div>4</div>
+  <div>5</div>
 </masonry-layout>
 ```
 
@@ -93,16 +93,6 @@ The `maxcolwidth` specifies how many pixels a column can maximum have when the `
 </masonry-layout>
 ```
 
-### Lock columns
-
-The `collock` attribute locks the columns. When the columns are locked, the layout will only distribute on the y axis when elements change their sizes. The default value is `false`.
-
-```html
-<masonry-layout collock>
-  ...
-</masonry-layout>
-```
-
 ### Change debounce time
 
 The `debounce` attribute specifies the amount of time in ms the layout reflow debounces each time the size of the masonry layout changes. This reflow is debounced to avoid the layout algorithm being invoked too many times in a row. The default value is `300ms`.
@@ -135,7 +125,7 @@ document.querySelector("masonry-layout").scheduleLayout();
 
 ## ➤ Overview
 
-Here's a complete overview of the component.
+Here's a complete overview of the element.
 
 ### masonry-layout
 
@@ -144,20 +134,12 @@ on the available vertical space, just like mason fitting stones in a wall.
 
 #### Properties
 
-| Property      | Attribute     | Type          | Description                                      |
-|---------------|---------------|---------------|--------------------------------------------------|
-| `colLock`     | `collock`     | `boolean`     | Whether the items should be locked in their columns after the have been placed. |
-| `cols`        | `cols`        | `MasonryCols` | The amount of columns.                           |
-| `debounce`    | `debounce`    | `number`      | The ms of debounce when the element resizes.     |
-| `gap`         | `gap`         | `number`      | The gap in pixels between the columns.           |
-| `maxColWidth` | `maxcolwidth` | `number`      | The maximum width of each column if cols are set to auto. |
-| `transition`  | `transition`  | `boolean`     | Whether the items should have a transition.      |
-
-#### CSS Custom Properties
-
-| Property                           | Description            |
-|------------------------------------|------------------------|
-| `--masonry-layout-item-transition` | Transition of an item. |
+| Property      | Attribute     | Type               | Description                                      |
+|---------------|---------------|--------------------|--------------------------------------------------|
+| `cols`        | `cols`        | `number \| "auto"` | The amount of columns.                           |
+| `debounce`    | `debounce`    | `number`           | The ms of debounce when the element resizes.     |
+| `gap`         | `gap`         | `number`           | The gap in pixels between the columns.           |
+| `maxColWidth` | `maxcolwidth` | `number`           | The maximum width of each column if cols are set to auto. |
 
 #### Slots
 
@@ -165,13 +147,20 @@ on the available vertical space, just like mason fitting stones in a wall.
 |------|-------------------------------------------------|
 |      | Items that should be distributed in the layout. |
 
+#### CSS Shadow Parts
+
+| Part           | Description                                      |
+|----------------|--------------------------------------------------|
+| `column`       | Each column of the masonry layout.               |
+| `column-index` | The specific column at the given index (eg. column-0 would target the first column and so on)) |
+
 
 
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)](#resizeobserver)
 
 ## ➤ ResizeObserver
 
-You might want to polyfill the `ResizeObserver`. The observer in the component makes sure to distribute the items whenever the size of the grid changes. If this is not polyfilled you will have to call the `layout()` function yourself when the height of the grid changes. If no `ResizeObserver` can be found on the `window` object it will instead re-distribute items when the size of the window changes.
+You might want to polyfill the `ResizeObserver`. The observer in the element makes sure to distribute the items whenever the size of the grid changes. If this is not polyfilled you will have to call the `layout()` function yourself when the height of the grid changes. If no `ResizeObserver` can be found on the `window` object it will instead re-distribute items when the size of the window changes.
 
 
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)](#license)

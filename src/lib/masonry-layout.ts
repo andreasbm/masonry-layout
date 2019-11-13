@@ -1,4 +1,4 @@
-import { ColHeightMap, createEmptyColHeightMap, debounce, DEFAULT_COLS, DEFAULT_DEBOUNCE_MS, DEFAULT_MAX_COL_WIDTH, DEFAULT_GAP, DISTRIBUTED_ATTR, getBooleanAttribute, getColCount, getColWidth, getNumberAttribute, getShortestCol, itemPosition, MasonryCols, MasonryItemLayout, setBooleanAttribute, tallestColHeight } from "./masonry-helpers";
+import { ColHeightMap, debounce, DEFAULT_COLS, DEFAULT_DEBOUNCE_MS, DEFAULT_GAP_PX, DEFAULT_MAX_COL_WIDTH, ELEMENT_NODE_TYPE, findSmallestColIndex, getColCount, getNumberAttribute, MasonryItemCachedRead } from "./masonry-helpers";
 
 /**
  * Typings required for the resize observer.
@@ -9,9 +9,13 @@ declare interface ResizeObserver {
 	disconnect (): void;
 }
 
-declare type ResizeObserverConstructor = new (callback: (() => void)) => ResizeObserver;
+declare type ResizeObserverEntries = {contentRect: {width: number, height: number}}[];
+declare type ResizeObserverConstructor = new (callback: ((entries: ResizeObserverEntries) => void)) => ResizeObserver;
 declare const ResizeObserver: ResizeObserverConstructor;
 
+/**
+ * Typings required for ShadyCSS.
+ */
 declare global {
 	interface Window {ShadyCSS?: any;}
 }
@@ -19,100 +23,74 @@ declare global {
 /**
  * Template for the masonry layout.
  */
-const template = document.createElement("template") as HTMLTemplateElement;
-template.innerHTML = `
-	<style>
-		:host {
-			display: block;
-			position: relative;
-			visibility: hidden;
-			transform: translate3d(0, 0, 0);
-		}
 
-		::slotted(*) {
-			position: absolute;
-		}
-		
-		/* Show the items after they have been distributed */
-		:host([data-masonry-distributed]) {
-			visibility: visible;
-		}
-		
-		/* Apply the transition after the items have been distributed */
-		:host([data-masonry-distributed][transition]) ::slotted([data-masonry-distributed]) {
-			transition: var(--masonry-layout-item-transition, transform 200ms ease);
-		}
-	</style>
-	<slot id="slot"></slot>
+const $template = document.createElement("template");
+$template.innerHTML = `
+  <style>
+    :host {
+      display: flex;
+      align-items: flex-start;
+      justify-content: stretch;
+    }
+
+    .column {
+      width: 100%;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .column:not(:last-child) {
+      margin-right: var(--_masonry-layout-gap, ${DEFAULT_GAP_PX}px);
+    }
+
+    .column ::slotted(*) {
+      margin-bottom: var(--_masonry-layout-gap, ${DEFAULT_GAP_PX}px);
+      box-sizing: border-box;
+    }
+
+    /* Hide the items that has not yet found the correct slot */
+    #unset-items {
+      opacity: 0;
+      position: absolute;
+      pointer-events: none;
+    }
+  </style>
+  <div id="unset-items">
+    <slot></slot>
+  </div>
 `;
 
 // Use polyfill only in browsers that lack native Shadow DOM.
-window.ShadyCSS && window.ShadyCSS.prepareTemplateStyles(template, "masonry-layout");
+window.ShadyCSS && window.ShadyCSS.prepareTemplateStyles($template, "masonry-layout");
 
 /**
  * Masonry layout web component. It places the slotted elements in the optimal position based
  * on the available vertical space, just like mason fitting stones in a wall.
  * @example <masonry-layout><div class="item"></div><div class="item"></div></masonry-layout>
+ * @csspart column - Each column of the masonry layout.
+ * @csspart column-index - The specific column at the given index (eg. column-0 would target the first column and so on))
  * @slot - Items that should be distributed in the layout.
- * @cssprop --masonry-layout-item-transition - Transition of an item.
  */
 export class MasonryLayout extends HTMLElement {
 
 	// The observed attributes.
 	// Whenever one of these changes we need to update the layout.
 	static get observedAttributes () {
-		return [
-			"maxcolwidth",
-			"collock",
-			"gap",
-			"cols",
-			"debounce"
-		];
+		return ["maxcolwidth", "gap", "cols"];
 	}
-
-	// A map containing the height for each col
-	private currentColHeightMap: ColHeightMap = [];
-	private ro: ResizeObserver | undefined = undefined;
-	private cancelNextResizeEvent = false;
-	private layoutCache: WeakMap<HTMLElement, MasonryItemLayout> = new WeakMap<HTMLElement, MasonryItemLayout>();
 
 	/**
 	 * The maximum width of each column if cols are set to auto.
 	 * @attr maxcolwidth
 	 * @param v
 	 */
-	set maxColWidth (v: number) {
+	set maxColWidth (v) {
 		this.setAttribute("maxcolwidth", v.toString());
 	}
 
-	get maxColWidth (): number {
+	get maxColWidth () {
 		return getNumberAttribute(this, "maxcolwidth", DEFAULT_MAX_COL_WIDTH);
-	}
-
-	/**
-	 * Whether the items should be locked in their columns after the have been placed.
-	 * @attr collock
-	 * @param v
-	 */
-	set colLock (v: boolean) {
-		setBooleanAttribute(this, "collock", v);
-	}
-
-	get colLock (): boolean {
-		return getBooleanAttribute(this, "collock");
-	}
-
-	/**
-	 * The gap in pixels between the columns.
-	 * @attr gap
-	 * @param v
-	 */
-	set gap (v: number) {
-		this.setAttribute("gap", v.toString());
-	}
-
-	get gap (): number {
-		return getNumberAttribute(this, "gap", DEFAULT_GAP);
 	}
 
 	/**
@@ -120,25 +98,25 @@ export class MasonryLayout extends HTMLElement {
 	 * @attr cols
 	 * @param v
 	 */
-	set cols (v: MasonryCols) {
+	set cols (v) {
 		this.setAttribute("cols", v.toString());
 	}
 
-	get cols (): MasonryCols {
+	get cols () {
 		return getNumberAttribute(this, "cols", DEFAULT_COLS);
 	}
 
 	/**
-	 * Whether the items should have a transition.
-	 * @attr transition
+	 * The gap in pixels between the columns.
+	 * @attr gap
 	 * @param v
 	 */
-	set transition (v: boolean) {
-		setBooleanAttribute(this, "transition", v);
+	set gap (v) {
+		this.setAttribute("gap", v.toString());
 	}
 
-	get transition (): boolean {
-		return getBooleanAttribute(this, "transition");
+	get gap () {
+		return getNumberAttribute(this, "gap", DEFAULT_GAP_PX);
 	}
 
 	/**
@@ -146,185 +124,256 @@ export class MasonryLayout extends HTMLElement {
 	 * @attr debounce
 	 * @param v
 	 */
-	set debounce (v: number) {
+	set debounce (v) {
 		this.setAttribute("debounce", v.toString());
 	}
 
-	get debounce (): number {
+	get debounce () {
 		return getNumberAttribute(this, "debounce", DEFAULT_DEBOUNCE_MS);
 	}
 
 	/**
-	 * The slot element.
+	 * The column elements.
 	 */
-	private get $slot (): HTMLSlotElement {
-		return this.shadowRoot!.querySelector("slot")! as HTMLSlotElement;
+	private get $columns (): HTMLElement[] {
+		return Array.from(this.shadowRoot!.querySelectorAll( `.column`)) as HTMLElement[];
 	}
+
+	// Unique debounce ID so different masonry layouts on one page won't affect eachother
+	private debounceId: string = `layout_${Math.random()}`;
+
+	// Prepare a weakmap for the cache
+	private cachedReads = new WeakMap<HTMLElement, MasonryItemCachedRead>();
+
+	// Reference to the default slot element
+	private $unsetElementsSlot!: HTMLSlotElement;
+
+	// Resize observer that layouts when necessary
+	private ro: ResizeObserver | undefined = undefined;
 
 	/**
-	 * All of the elements in the slot that are an Node.ELEMENT_NODE.
-	 * https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeType
+	 * Attach the shadow DOM.
 	 */
-	private get $items (): HTMLElement[] {
-		return this.$slot.assignedNodes().filter(node => {
-			return node.nodeType === 1;
-		}) as HTMLElement[];
-	}
-
 	constructor () {
 		super();
+		const shadow = this.attachShadow({mode: "open"});
+		shadow.appendChild($template.content.cloneNode(true));
 
-		// Bind the relevant functions to the element
-		this.scheduleLayout = this.scheduleLayout.bind(this);
+		this.onSlotChange = this.onSlotChange.bind(this);
+		this.onResize = this.onResize.bind(this);
 		this.layout = this.layout.bind(this);
-		this.didResize = this.didResize.bind(this);
+
+		this.$unsetElementsSlot = this.shadowRoot!.querySelector<HTMLSlotElement>("#unset-items > slot")!;
 	}
 
 	/**
-	 * Attaches the listeners when the element is added to the DOM.
+	 * Hook up event listeners when added to the DOM.
 	 */
 	connectedCallback () {
-		window.ShadyCSS && window.ShadyCSS.styleElement(this);
-		if (!this.shadowRoot) {
+		this.$unsetElementsSlot.addEventListener("slotchange", this.onSlotChange);
 
-			// Attach the shadow root
-			const shadow = this.attachShadow({mode: "open"});
-			shadow.appendChild(template.content.cloneNode(true));
-		}
-
-		this.attachListeners();
-	}
-
-	/**
-	 * Removes listeners when the element is removed from the DOM.
-	 */
-	disconnectedCallback () {
-		this.detachListeners();
-	}
-
-	/**
-	 * Updates the layout when the observed attributes changes.
-	 */
-	attributeChangedCallback () {
-		this.scheduleLayout();
-	}
-
-	/**
-	 * Attaches all listeners to the element.
-	 */
-	private attachListeners () {
-		this.$slot.addEventListener("slotchange", this.layout);
-
+		// Attach resize observer so we can relayout eachtime the size changes
 		if ("ResizeObserver" in window) {
-			this.ro = new ResizeObserver(this.didResize);
+			this.ro = new ResizeObserver(this.onResize);
 			this.ro.observe(this);
 
 		} else {
-			window.addEventListener("resize", this.didResize);
+			window.addEventListener("resize", this.onResize as any);
+		}
+	}
+
+	/**
+	 * Remove event listeners when removed from the DOM.
+	 */
+	disconnectedCallback () {
+		this.$unsetElementsSlot.removeEventListener("slotchange", this.onSlotChange);
+		window.removeEventListener("resize", this.onResize as any);
+		if (this.ro != null) {
+			this.ro.unobserve(this);
+		}
+	}
+
+	/**
+	 * Updates the layout when one of the observed attributes changes.
+	 */
+	attributeChangedCallback (name: string) {
+		switch (name) {
+			case "gap":
+				this.style.setProperty(`--_masonry-layout-gap`, `${this.gap}px`);
+				break;
 		}
 
+		// Recalculate the layout
+		this.scheduleLayout();
 	}
 
 	/**
-	 * Detaches all listeners from the element.
+	 *
 	 */
-	private detachListeners () {
-		this.$slot.removeEventListener("slotchange", this.layout);
-		window.removeEventListener("resize", this.didResize);
-		if (this.ro != null) this.ro.unobserve(this);
+	onSlotChange () {
+
+		// Grab unset elements
+		const $unsetElements = this.$unsetElementsSlot.assignedNodes().filter(node => node.nodeType === ELEMENT_NODE_TYPE);
+
+		// If there are more items not yet set layout straight awy to avoid the item being delayed in its render.
+		if ($unsetElements.length > 0) {
+			this.layout();
+		}
 	}
 
 	/**
-	 * Called when the element resizes and schedules a layout.
+	 * Each time the element resizes we need to schedule a layout
+	 * if the amount available columns has has changed.
+	 * @param entries
 	 */
-	private didResize () {
-		if (this.cancelNextResizeEvent) {
-			this.cancelNextResizeEvent = false;
+	onResize (entries?: ResizeObserverEntries) {
+
+		// Grab the width of the element. If it isn't provided by the resize observer entry
+		// we compute it ourselves by looking at the offset width of the element.
+		const {width} = entries != null && entries.length > 0
+			? entries[0].contentRect : {width: this.offsetWidth};
+
+		// Get the amount of columns we should have
+		const colCount = getColCount(
+			width,
+			this.cols,
+			this.maxColWidth
+		);
+
+		// Compare the amount of columns we should have to the current amount of columns.
+		// Schedule a layout that invalidates the cache if they are no longer the same.
+		if (colCount !== this.$columns.length) {
+			this.scheduleLayout(this.debounce, true);
+		}
+	}
+
+	/**
+	 * Render X amount of columns.
+	 * @param colCount
+	 */
+	renderCols (colCount: number) {
+
+		// Get the current columns
+		const $columns = this.$columns;
+
+		// If the amount of columns is correct we don't have to add new columns.
+		if ($columns.length === colCount) {
 			return;
 		}
 
-		this.scheduleLayout();
+		// Remove all of the current columns
+		for (const $column of $columns) {
+			$column.remove();
+		}
+
+		// Add some new columns
+		for (let i = 0; i < colCount; i++) {
+
+			// Create a column element
+			const $column = document.createElement(`div`);
+			$column.classList.add(`column`);
+			$column.setAttribute(`part`, `column column-${i}`);
+
+			// Add a slot with the name set to the index of the column
+			const $slot = document.createElement(`slot`);
+			$slot.setAttribute(`name`, i.toString());
+
+			// Append the slot to the column an the column to the shadow root.
+			$column.appendChild($slot);
+			this.shadowRoot!.appendChild($column);
+		}
+	}
+
+	/**
+	 * Caches a read for an element.
+	 * @param $elem
+	 */
+	cacheRead ($elem: HTMLElement): MasonryItemCachedRead {
+
+		// Read properties of the element
+		const value: MasonryItemCachedRead = {
+			height: $elem.getBoundingClientRect().height
+		};
+
+		// Cache the read of the element
+		this.cachedReads.set($elem, value);
+		return value;
 	}
 
 	/**
 	 * Schedules a layout.
-	 * @param ms - The debounce time
+	 * @param ms
+	 * @param invalidateCache
 	 */
-	scheduleLayout (ms?: number) {
-		debounce(this.layout, ms || this.debounce, "layout");
+	scheduleLayout (ms: number = this.debounce, invalidateCache: boolean = false) {
+		debounce(() => this.layout(invalidateCache), ms, this.debounceId);
 	}
 
 	/**
-	 * Re-distributes all of the items.
+	 * Layouts the elements.
+	 * @param invalidateCache
 	 */
-	layout () {
+	layout (invalidateCache: boolean = false) {
 		requestAnimationFrame(() => {
-			const $items = this.$items;
+			// console.time("layout");
 
-			// READ: To begin with we batch the reads to avoid layout trashing.
-			// The first get will most likely cause a reflow.
-			const totalWidth = this.offsetWidth;
-			const itemHeights = $items.map($item => $item.offsetHeight);
-
+			// Compute relevant values we are going to use for layouting the elements.
 			const gap = this.gap;
-			const colLock = this.colLock;
-			const colCount = getColCount(totalWidth, this.cols, this.maxColWidth);
-			const colWidth = getColWidth(totalWidth, gap, colCount);
-			const colHeightMap = createEmptyColHeightMap(colCount);
+			const $elements = Array.from(this.children).filter(node => node.nodeType === ELEMENT_NODE_TYPE) as HTMLElement[];
+			const colCount = getColCount(
+				this.offsetWidth,
+				this.cols,
+				this.maxColWidth
+			);
 
-			// Check whether the amount of columns has changed.
-			// If they have changed we need to reorder everything, also if the collock is set to true!
-			const reorderCols = colHeightMap.length !== this.currentColHeightMap.length;
+			// Have an array that keeps track of the highest col height.
+			const colHeights: ColHeightMap = Array(colCount).fill(0) as ColHeightMap;
 
-			// Set the position for each item
-			for (const [i, $item] of $items.entries()) {
+			// Instead of interleaving reads and writes we create an array for all writes so we can batch them at once.
+			const writes: (() => void)[] = [];
 
-				// Find the shortest col (we need to prioritize filling that one) or used the existing (locked) one
-				const currentLayout = this.layoutCache.get($item);
-				const col = colLock && !reorderCols && currentLayout != null ? currentLayout.col : getShortestCol(colHeightMap);
+			// Go through all elements and figure out what column (aka slot) they should be put in.
+			for (const $elem of $elements) {
 
-				// Compute the position for the item
-				const {left, top} = itemPosition(i, colWidth, gap, col, colCount, colHeightMap);
+				// Get the read data of the item (either, pick the cached value or cache it while reading it).
+				let {height} =
+					invalidateCache || !this.cachedReads.has($elem)
+						? this.cacheRead($elem)
+						: this.cachedReads.get($elem)!;
 
-				// Check if the layout has changed
-				if (currentLayout == null ||
-					(currentLayout.colWidth !== colWidth || currentLayout.left !== left || currentLayout.top !== top || currentLayout.col !== col)) {
-					this.layoutCache.set($item, {left, top, col, colWidth});
+				// Find the currently smallest column
+				let smallestColIndex = findSmallestColIndex(colHeights);
 
-					// WRITE: Assign the new position.
-					Object.assign($item.style, {
-						transform: `translate(${left}px, ${top}px)`,
-						width: `${colWidth}px`
-					});
+				// Add the height of the item and the gap to the column heights.
+				// It is very important we add the gap since the more elements we have,
+				// the bigger the role the margins play when computing the actual height of the columns.
+				colHeights[smallestColIndex] += height + gap;
 
-					// WRITE: Tell the rest of the world that this element has been distributed
-					// But defer it to allow the transformation to be applied first
-					if (!$item.hasAttribute(DISTRIBUTED_ATTR)) {
-						requestAnimationFrame(() => {
-							$item.setAttribute(DISTRIBUTED_ATTR, "");
-						});
-					}
+				// Set the slot on the element to get the element to the correct column.
+				// Only do it if the slot has actually changed.
+				const newSlot = smallestColIndex.toString();
+				if ($elem.slot !== newSlot) {
+					writes.push(() => ($elem.slot = newSlot));
 				}
-
-				// Add the gained height to the height map
-				colHeightMap[col] = top + itemHeights[i];
 			}
 
-			// WRITE: Set the height of the entire component to the height of the tallest col
-			this.style.height = `${tallestColHeight(colHeightMap)}px`;
-
-			// WRITE: Tell the rest of the world that the layout has now been distributed
-			if (!this.hasAttribute(DISTRIBUTED_ATTR)) {
-				this.setAttribute(DISTRIBUTED_ATTR, "");
+			// Batch all the writes at once
+			for (const write of writes) {
+				write();
 			}
 
-			// Store the new heights of the cols
-			this.currentColHeightMap = colHeightMap;
+			// Render the columns
+			this.renderCols(colCount);
+
+			// Commit the changes for ShadyCSS
+			window.ShadyCSS && window.ShadyCSS.styleElement(this);
+
+			// console.timeEnd("layout");
 		});
 	}
 }
 
-window.customElements.define("masonry-layout", MasonryLayout);
+customElements.define("masonry-layout", MasonryLayout);
 
 declare global {
 	interface HTMLElementTagNameMap {
