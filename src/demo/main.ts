@@ -2,8 +2,8 @@ import { MasonryLayout } from "../lib/masonry-layout";
 import "../lib/masonry-layout";
 
 const $masonry = document.querySelector<MasonryLayout>("#masonry")!;
-const INITIAL_ITEMS_COUNT = 10000;
-const SHOW_IMAGES = false;
+const INITIAL_ITEMS_COUNT = 100;
+const SHOW_IMAGES = INITIAL_ITEMS_COUNT <= 100;
 
 const $addButton = document.querySelector<HTMLButtonElement>("#add_button")!;
 const $colCountButton = document.querySelector<HTMLButtonElement>("#col_count_button")!;
@@ -38,7 +38,7 @@ function randomColor (): string {
  * Returns a random image source.
  */
 function randomImage () {
-	return `https://picsum.photos/${randomNumberInRange(500, 600)}`;
+	return `https://picsum.photos/${randomNumberInRange(500, 550)}`;
 }
 
 /**
@@ -111,7 +111,7 @@ $gapButton.addEventListener("click", () => {
 });
 
 $invalidateButton.addEventListener("click", () => {
-	$masonry.layout(true);
+	$masonry.layout();
 });
 
 

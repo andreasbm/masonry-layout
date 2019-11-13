@@ -26,7 +26,7 @@
 * **Zero dependencies:** Created using only vanilla js - no dependencies and framework agnostic!
 * **Customizable:** Can customize almost everything (eg. columns, transitions, gap).
 * **User friendly:** Automatically re-distribute items when the size of the grid changes or new elements are added
-* **Performant:** Efficient & fast (10.000 items takes 40ms for the initial layout and 10ms for the subsequent ones)
+* **Performant:** Efficient & fast - Build with performance in mind
 
 
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)](#installation)

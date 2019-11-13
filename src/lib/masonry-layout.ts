@@ -1,4 +1,4 @@
-import { COL_COUNT_CSS_VAR_NAME, ColHeightMap, debounce, DEFAULT_COLS, DEFAULT_DEBOUNCE_MS, DEFAULT_GAP_PX, DEFAULT_MAX_COL_WIDTH, ELEMENT_NODE_TYPE, findSmallestColIndex, GAP_CSS_VAR_NAME, getColCount, getNumberAttribute, MasonryItemCachedRead } from "./masonry-helpers";
+import { COL_COUNT_CSS_VAR_NAME, ColHeightMap, debounce, DEFAULT_COLS, DEFAULT_DEBOUNCE_MS, DEFAULT_GAP_PX, DEFAULT_MAX_COL_WIDTH, ELEMENT_NODE_TYPE, findSmallestColIndex, GAP_CSS_VAR_NAME, getColCount, getNumberAttribute } from "./masonry-helpers";
 
 /**
  * Typings required for the resize observer.
@@ -136,20 +136,20 @@ export class MasonryLayout extends HTMLElement {
 	 * The column elements.
 	 */
 	private get $columns (): HTMLElement[] {
-		return Array.from(this.shadowRoot!.querySelectorAll( `.column`)) as HTMLElement[];
+		return Array.from(this.shadowRoot!.querySelectorAll(`.column`)) as HTMLElement[];
 	}
 
 	// Unique debounce ID so different masonry layouts on one page won't affect eachother
 	private debounceId: string = `layout_${Math.random()}`;
-
-	// Prepare a weakmap for the cache
-	private cachedReads = new WeakMap<HTMLElement, MasonryItemCachedRead>();
 
 	// Reference to the default slot element
 	private $unsetElementsSlot!: HTMLSlotElement;
 
 	// Resize observer that layouts when necessary
 	private ro: ResizeObserver | undefined = undefined;
+
+	// The current request animation frame callback
+	private currentRequestAnimationFrameCallback: number | undefined = undefined;
 
 	/**
 	 * Attach the shadow DOM.
@@ -213,7 +213,8 @@ export class MasonryLayout extends HTMLElement {
 	onSlotChange () {
 
 		// Grab unset elements
-		const $unsetElements = this.$unsetElementsSlot.assignedNodes().filter(node => node.nodeType === ELEMENT_NODE_TYPE);
+		const $unsetElements = this.$unsetElementsSlot.assignedNodes()
+		                           .filter(node => node.nodeType === ELEMENT_NODE_TYPE);
 
 		// If there are more items not yet set layout straight awy to avoid the item being delayed in its render.
 		if ($unsetElements.length > 0) {
@@ -241,9 +242,9 @@ export class MasonryLayout extends HTMLElement {
 		);
 
 		// Compare the amount of columns we should have to the current amount of columns.
-		// Schedule a layout that invalidates the cache if they are no longer the same.
+		// Schedule a layout if they are no longer the same.
 		if (colCount !== this.$columns.length) {
-			this.scheduleLayout(this.debounce, true);
+			this.scheduleLayout();
 		}
 	}
 
@@ -288,41 +289,31 @@ export class MasonryLayout extends HTMLElement {
 	}
 
 	/**
-	 * Caches a read for an element.
-	 * @param $elem
-	 */
-	cacheRead ($elem: HTMLElement): MasonryItemCachedRead {
-
-		// Read properties of the element
-		const value: MasonryItemCachedRead = {
-			height: $elem.getBoundingClientRect().height
-		};
-
-		// Cache the read of the element
-		this.cachedReads.set($elem, value);
-		return value;
-	}
-
-	/**
 	 * Schedules a layout.
 	 * @param ms
-	 * @param invalidateCache
 	 */
-	scheduleLayout (ms: number = this.debounce, invalidateCache: boolean = false) {
-		debounce(() => this.layout(invalidateCache), ms, this.debounceId);
+	scheduleLayout (ms: number = this.debounce) {
+		debounce(this.layout, ms, this.debounceId);
 	}
 
 	/**
 	 * Layouts the elements.
-	 * @param invalidateCache
 	 */
-	layout (invalidateCache: boolean = false) {
-		requestAnimationFrame(() => {
+	layout () {
+
+		// Cancel the current animation frame callback
+		if (this.currentRequestAnimationFrameCallback != null) {
+			window.cancelAnimationFrame(this.currentRequestAnimationFrameCallback);
+		}
+
+		// Layout in the next animationframe
+		this.currentRequestAnimationFrameCallback = requestAnimationFrame(() => {
 			// console.time("layout");
 
 			// Compute relevant values we are going to use for layouting the elements.
 			const gap = this.gap;
-			const $elements = Array.from(this.children).filter(node => node.nodeType === ELEMENT_NODE_TYPE) as HTMLElement[];
+			const $elements = Array.from(this.children)
+			                       .filter(node => node.nodeType === ELEMENT_NODE_TYPE) as HTMLElement[];
 			const colCount = getColCount(
 				this.offsetWidth,
 				this.cols,
@@ -336,13 +327,11 @@ export class MasonryLayout extends HTMLElement {
 			const writes: (() => void)[] = [];
 
 			// Go through all elements and figure out what column (aka slot) they should be put in.
+			// We only do reads in this for loop and postpone the writes
 			for (const $elem of $elements) {
 
-				// Get the read data of the item (either, pick the cached value or cache it while reading it).
-				let {height} =
-					invalidateCache || !this.cachedReads.has($elem)
-						? this.cacheRead($elem)
-						: this.cachedReads.get($elem)!;
+				// Read the height of the element
+				const height = $elem.getBoundingClientRect().height;
 
 				// Find the currently smallest column
 				let smallestColIndex = findSmallestColIndex(colHeights);

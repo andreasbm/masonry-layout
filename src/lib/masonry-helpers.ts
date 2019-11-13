@@ -11,7 +11,6 @@ export const ELEMENT_NODE_TYPE = 1;
 
 export type ColHeightMap = number[];
 export type MasonryCols = number | "auto";
-export type MasonryItemCachedRead = {height: number};
 
 const DEBOUNCE_MAP: Map<string, number> = new Map();
 
