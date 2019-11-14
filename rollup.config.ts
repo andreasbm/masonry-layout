@@ -47,7 +47,7 @@ export default {
 				target: files.dist_index,
 				scriptType: "text/javascript",
 				polyfillConfig: {
-					features: ["es", "template", "shadow-dom", "custom-elements"]
+					features: ["es", "template", "shadow-dom", "custom-elements", "resizeobserver"]
 				},
 				include: /main(-.*)?\.js$/
 			}

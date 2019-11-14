@@ -156,11 +156,15 @@ on the available vertical space, just like mason fitting stones in a wall.
 
 
 
-[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)](#resizeobserver)
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)](#support-for-old-browsers)
 
-## ➤ ResizeObserver
+## ➤ Support for old browsers
 
-You might want to polyfill the `ResizeObserver`. The observer in the element makes sure to distribute the items whenever the size of the grid changes. If this is not polyfilled you will have to call the `layout()` function yourself when the height of the grid changes. If no `ResizeObserver` can be found on the `window` object it will instead re-distribute items when the size of the window changes.
+If you are going to support older browsers that doesn't support [Custom Elements](https://caniuse.com/#search=Custom%20Elements), [Shadow Dom](https://caniuse.com/#search=shadow%20root) or [ResizeObservers](https://caniuse.com/#search=resize%20observer) you should polyfill the features. You can do this very easily by using [the brilliant polfiller service](https://github.com/wessberg/polyfiller). This can be done in one line of code by adding the following to your `index.html` before you import the `masonry-layout`.
+
+```html
+<script crossorigin src="https://polyfill.app/api/polyfill?features=es,template,shadow-dom,custom-elements,resizeobserver"></script>
+```
 
 
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)](#license)
@@ -168,4 +172,3 @@ You might want to polyfill the `ResizeObserver`. The observer in the element mak
 ## ➤ License
 	
 Licensed under [MIT](https://opensource.org/licenses/MIT).
-
