@@ -58,7 +58,7 @@ The `gap` attribute specifies how many pixels the gap between the elements shoul
 
 ### Max column width
 
-The `maxcolwidth` specifies how many pixels a column can maximum have when the `cols` are set to `auto`. The default value is `400px`.
+The `maxcolwidth` specifies how many pixels a column can maximum have when the `cols` attribute is set to `auto`. The default value is `400px`.
 
 ```html
 <masonry-layout maxcolwidth="200">
@@ -78,7 +78,7 @@ The `debounce` attribute specifies the amount of time in ms the layout reflow de
 
 ## Trigger layout
 
-If you want to force layout to can simply call the `layout()` function on the masonry layout.
+If you want to force layout to can call the `layout()` function on the masonry layout.
 
 ```js
 document.querySelector("masonry-layout").layout();

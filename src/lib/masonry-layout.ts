@@ -70,7 +70,7 @@ window.ShadyCSS && window.ShadyCSS.prepareTemplateStyles($template, "masonry-lay
  * on the available vertical space, just like mason fitting stones in a wall.
  * @example <masonry-layout><div class="item"></div><div class="item"></div></masonry-layout>
  * @csspart column - Each column of the masonry layout.
- * @csspart column-index - The specific column at the given index (eg. column-0 would target the first column and so on))
+ * @csspart column-index - The specific column at the given index (eg. column-0 would target the first column and so on)
  * @slot - Items that should be distributed in the layout.
  */
 export class MasonryLayout extends HTMLElement {
