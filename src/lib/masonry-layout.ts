@@ -17,7 +17,7 @@ declare const ResizeObserver: ResizeObserverConstructor;
  * Typings required for ShadyCSS.
  */
 declare global {
-	interface Window {ShadyCSS?: any;}
+	interface Window {ShadyCSS?: any; ShadyDOM?: any;}
 }
 
 /**
@@ -47,6 +47,7 @@ $template.innerHTML = `
     .column ::slotted(*) {
       margin-bottom: var(${GAP_CSS_VAR_NAME}, ${DEFAULT_GAP_PX}px);
       box-sizing: border-box;
+      width: 100%;
     }
 
     /* Hide the items that has not yet found the correct slot */
@@ -213,7 +214,7 @@ export class MasonryLayout extends HTMLElement {
 	onSlotChange () {
 
 		// Grab unset elements
-		const $unsetElements = this.$unsetElementsSlot.assignedNodes()
+		const $unsetElements = (this.$unsetElementsSlot.assignedNodes() || [])
 		                           .filter(node => node.nodeType === ELEMENT_NODE_TYPE);
 
 		// If there are more items not yet set layout straight awy to avoid the item being delayed in its render.
@@ -231,7 +232,7 @@ export class MasonryLayout extends HTMLElement {
 
 		// Grab the width of the element. If it isn't provided by the resize observer entry
 		// we compute it ourselves by looking at the offset width of the element.
-		const {width} = entries != null && entries.length > 0
+		const {width} = entries != null && Array.isArray(entries) && entries.length > 0
 			? entries[0].contentRect : {width: this.offsetWidth};
 
 		// Get the amount of columns we should have
@@ -264,7 +265,7 @@ export class MasonryLayout extends HTMLElement {
 
 		// Remove all of the current columns
 		for (const $column of $columns) {
-			$column.remove();
+			$column.parentNode && $column.parentNode.removeChild($column);
 		}
 
 		// Add some new columns
@@ -286,6 +287,9 @@ export class MasonryLayout extends HTMLElement {
 
 		// Set the column count so we can compute the correct width of the columns
 		this.style.setProperty(`${COL_COUNT_CSS_VAR_NAME}`, colCount.toString());
+
+		// Commit the changes for ShadyCSS
+		window.ShadyCSS && window.ShadyCSS.styleElement(this);
 	}
 
 	/**
