@@ -8,7 +8,6 @@ const SHOW_IMAGES = INITIAL_ITEMS_COUNT <= 100;
 const $addButton = document.querySelector<HTMLButtonElement>("#add_button")!;
 const $colCountButton = document.querySelector<HTMLButtonElement>("#col_count_button")!;
 const $gapButton = document.querySelector<HTMLButtonElement>("#gap_button")!;
-const $invalidateButton = document.querySelector<HTMLButtonElement>("#invalidate_button")!;
 
 /**
  * Returns a random height.
@@ -109,10 +108,5 @@ $gapButton.addEventListener("click", () => {
 	const res = prompt("Enter the gap size in pixels (default value is '24')") || "";
 	$masonry.gap = isNaN(<any>res) ? 24 : parseInt(res);
 });
-
-$invalidateButton.addEventListener("click", () => {
-	$masonry.layout();
-});
-
 
 initialize();
