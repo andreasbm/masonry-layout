@@ -34,7 +34,8 @@ $template.innerHTML = `
     }
 
     .column {
-      width: calc((100% / var(${COL_COUNT_CSS_VAR_NAME}, 1)) - var(${GAP_CSS_VAR_NAME}, ${DEFAULT_GAP_PX}px));
+			max-width: calc(100% / var(${COL_COUNT_CSS_VAR_NAME}, 1));
+			width: 100%;
       flex: 1;
       display: flex;
       flex-direction: column;
