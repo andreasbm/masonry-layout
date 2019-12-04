@@ -38,7 +38,6 @@
 		"s:dev": "rollup -c rollup.config.ts --watch --environment NODE_ENV:dev",
 		"s:prod": "rollup -c rollup.config.ts --watch --environment NODE_ENV:prod",
 		"s": "npm run s:dev",
-		"deploy": "npm run b:demo:prod && firebase deploy",
 		"readme": "node node_modules/.bin/readme generate",
 		"postversion": "npm run readme && npm run b:lib",
 		"publish:patch": "np patch --contents=dist --no-cleanup",

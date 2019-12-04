@@ -25,8 +25,9 @@ declare global {
 
 /**
  * Template for the masonry layout.
+ * Max width of each column is computed as the width in percentage of
+ * the column minus the total with of the gaps divided between each column.
  */
-
 const $template = document.createElement("template");
 $template.innerHTML = `
   <style>
@@ -37,7 +38,7 @@ $template.innerHTML = `
     }
 
     .column {
-	  max-width: calc(100% / var(${COL_COUNT_CSS_VAR_NAME}, 1));
+	  max-width: calc((100% / var(${COL_COUNT_CSS_VAR_NAME}, 1) - ((var(${GAP_CSS_VAR_NAME}, ${DEFAULT_GAP_PX}px) * (var(${COL_COUNT_CSS_VAR_NAME}, 1) - 1) / var(${COL_COUNT_CSS_VAR_NAME}, 1)))));
 	  width: 100%;
       flex: 1;
       display: flex;
