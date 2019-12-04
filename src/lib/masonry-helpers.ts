@@ -1,4 +1,4 @@
-export const DEFAULT_MAX_COL_WIDTH = 400;
+export const DEFAULT_MAX_COL_WIDTH = 500;
 export const DEFAULT_COLS = "auto";
 export const DEFAULT_DEBOUNCE_MS = 300;
 export const DEFAULT_GAP_PX = 24;
@@ -32,8 +32,10 @@ export function getNumberAttribute<T> ($elem: HTMLElement, name: string, default
  * @param cols
  * @param maxColWidth
  */
-export function getColCount(totalWidth: number, cols: MasonryCols, maxColWidth: number): number {
-	return isNaN(cols as number) ? Math.max(1, Math.floor(totalWidth / maxColWidth)) : cols as number;
+export function getColCount (totalWidth: number, cols: MasonryCols, maxColWidth: number): number {
+	return isNaN(cols as number)
+		? Math.max(1, Math.ceil(totalWidth / maxColWidth))
+		: cols as number;
 }
 
 /**
@@ -42,7 +44,7 @@ export function getColCount(totalWidth: number, cols: MasonryCols, maxColWidth: 
  * @param ms
  * @param id
  */
-export function debounce(cb: (() => void), ms: number, id: string) {
+export function debounce (cb: (() => void), ms: number, id: string) {
 	const existingTimeout = DEBOUNCE_MAP.get(id);
 	if (existingTimeout != null) window.clearTimeout(existingTimeout);
 	DEBOUNCE_MAP.set(id, window.setTimeout(cb, ms));
@@ -52,7 +54,7 @@ export function debounce(cb: (() => void), ms: number, id: string) {
  * Returns the index of the column with the smallest height.
  * @param colHeights
  */
-export function findSmallestColIndex(colHeights: ColHeightMap) {
+export function findSmallestColIndex (colHeights: ColHeightMap) {
 	let smallestIndex = 0;
 	let smallestHeight = Infinity;
 	colHeights.forEach((height, i) => {

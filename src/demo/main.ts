@@ -1,3 +1,4 @@
+import { DEFAULT_COLS, DEFAULT_GAP_PX, DEFAULT_MAX_COL_WIDTH } from "../lib/masonry-helpers";
 import { MasonryLayout } from "../lib/masonry-layout";
 import "../lib/masonry-layout";
 
@@ -8,6 +9,7 @@ const SHOW_IMAGES = INITIAL_ITEMS_COUNT <= 100;
 const $addButton = document.querySelector<HTMLButtonElement>("#add_button")!;
 const $colCountButton = document.querySelector<HTMLButtonElement>("#col_count_button")!;
 const $gapButton = document.querySelector<HTMLButtonElement>("#gap_button")!;
+const $maxColWidthButton = document.querySelector<HTMLButtonElement>("#max_col_width_button")!;
 
 /**
  * Returns a random height.
@@ -100,13 +102,18 @@ $addButton.addEventListener("click", () => {
 });
 
 $colCountButton.addEventListener("click", () => {
-	const res = prompt("Enter the amount of columns (enter nothing for 'auto')") || "";
-	$masonry.cols = isNaN(<any>res) ? "auto" : Math.max(0, Math.min(parseInt(res), 30));
+	const res = prompt(`Enter the amount of columns (default value is '${DEFAULT_COLS}')`) || "";
+	$masonry.cols = isNaN(<any>res) ? DEFAULT_COLS : Math.max(0, Math.min(parseInt(res), 30));
 });
 
 $gapButton.addEventListener("click", () => {
-	const res = prompt("Enter the gap size in pixels (default value is '24')") || "";
-	$masonry.gap = isNaN(<any>res) ? 24 : parseInt(res);
+	const res = prompt(`Enter the gap size in pixels (default value is '${DEFAULT_GAP_PX}')`) || "";
+	$masonry.gap = isNaN(<any>res) ? DEFAULT_GAP_PX : parseInt(res);
+});
+
+$maxColWidthButton.addEventListener("click", () => {
+	const res = prompt(`Enter the max col width in pixels (default value is '${DEFAULT_MAX_COL_WIDTH}')`) || "";
+	$masonry.maxColWidth = isNaN(<any>res) ? DEFAULT_MAX_COL_WIDTH : parseInt(res);
 });
 
 initialize();

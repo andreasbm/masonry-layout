@@ -17,7 +17,10 @@ declare const ResizeObserver: ResizeObserverConstructor;
  * Typings required for ShadyCSS.
  */
 declare global {
-	interface Window {ShadyCSS?: any; ShadyDOM?: any;}
+	interface Window {
+		ShadyCSS?: any;
+		ShadyDOM?: any;
+	}
 }
 
 /**
@@ -34,8 +37,8 @@ $template.innerHTML = `
     }
 
     .column {
-			max-width: calc(100% / var(${COL_COUNT_CSS_VAR_NAME}, 1));
-			width: 100%;
+	  max-width: calc(100% / var(${COL_COUNT_CSS_VAR_NAME}, 1));
+	  width: 100%;
       flex: 1;
       display: flex;
       flex-direction: column;
@@ -201,7 +204,7 @@ export class MasonryLayout extends HTMLElement {
 	attributeChangedCallback (name: string) {
 		switch (name) {
 			case "gap":
-				this.style.setProperty(`${GAP_CSS_VAR_NAME}`, `${this.gap}px`);
+				this.style.setProperty(GAP_CSS_VAR_NAME, `${this.gap}px`);
 				break;
 		}
 
@@ -216,7 +219,7 @@ export class MasonryLayout extends HTMLElement {
 
 		// Grab unset elements
 		const $unsetElements = (this.$unsetElementsSlot.assignedNodes() || [])
-		                           .filter(node => node.nodeType === ELEMENT_NODE_TYPE);
+			.filter(node => node.nodeType === ELEMENT_NODE_TYPE);
 
 		// If there are more items not yet set layout straight awy to avoid the item being delayed in its render.
 		if ($unsetElements.length > 0) {
@@ -287,7 +290,7 @@ export class MasonryLayout extends HTMLElement {
 		}
 
 		// Set the column count so we can compute the correct width of the columns
-		this.style.setProperty(`${COL_COUNT_CSS_VAR_NAME}`, colCount.toString());
+		this.style.setProperty(COL_COUNT_CSS_VAR_NAME, colCount.toString());
 
 		// Commit the changes for ShadyCSS
 		window.ShadyCSS && window.ShadyCSS.styleElement(this);
