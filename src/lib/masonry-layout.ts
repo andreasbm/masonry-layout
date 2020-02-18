@@ -91,11 +91,11 @@ export class MasonryLayout extends HTMLElement {
 	 * @attr maxcolwidth
 	 * @param v
 	 */
-	set maxColWidth (v) {
+	set maxColWidth (v: number) {
 		this.setAttribute("maxcolwidth", v.toString());
 	}
 
-	get maxColWidth () {
+	get maxColWidth (): number {
 		return getNumberAttribute(this, "maxcolwidth", DEFAULT_MAX_COL_WIDTH);
 	}
 
@@ -104,11 +104,11 @@ export class MasonryLayout extends HTMLElement {
 	 * @attr cols
 	 * @param v
 	 */
-	set cols (v) {
+	set cols (v: number | "auto") {
 		this.setAttribute("cols", v.toString());
 	}
 
-	get cols () {
+	get cols (): number | "auto" {
 		return getNumberAttribute(this, "cols", DEFAULT_COLS);
 	}
 
@@ -117,11 +117,11 @@ export class MasonryLayout extends HTMLElement {
 	 * @attr gap
 	 * @param v
 	 */
-	set gap (v) {
+	set gap (v: number) {
 		this.setAttribute("gap", v.toString());
 	}
 
-	get gap () {
+	get gap (): number {
 		return getNumberAttribute(this, "gap", DEFAULT_GAP_PX);
 	}
 
@@ -130,11 +130,11 @@ export class MasonryLayout extends HTMLElement {
 	 * @attr debounce
 	 * @param v
 	 */
-	set debounce (v) {
+	set debounce (v: number) {
 		this.setAttribute("debounce", v.toString());
 	}
 
-	get debounce () {
+	get debounce (): number {
 		return getNumberAttribute(this, "debounce", DEFAULT_DEBOUNCE_MS);
 	}
 
