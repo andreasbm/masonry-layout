@@ -1,7 +1,7 @@
 import ts from "@wessberg/rollup-plugin-ts";
 import path from "path";
-import commonjs from "rollup-plugin-commonjs";
-import resolve from "rollup-plugin-node-resolve";
+import commonjs from "@rollup/plugin-commonjs";
+import resolve from "@rollup/plugin-node-resolve";
 import progress from "rollup-plugin-progress";
 import { terser } from "rollup-plugin-terser";
 
