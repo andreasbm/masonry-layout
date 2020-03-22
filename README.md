@@ -1,4 +1,4 @@
-<h1 align="center">@appnest/masonry-layout</h1>
+<!-- ⚠️ This README has been generated from the file(s) "blueprint.md" ⚠️--><h1 align="center">@appnest/masonry-layout</h1>
 
 <p align="center">
 		<a href="https://npmcharts.com/compare/@appnest/masonry-layout?minimal=true"><img alt="Downloads per month" src="https://img.shields.io/npm/dm/@appnest/masonry-layout.svg" height="20"/></a>
@@ -132,14 +132,33 @@ Here's a complete overview of the element.
 Masonry layout web component. It places the slotted elements in the optimal position based
 on the available vertical space, just like mason fitting stones in a wall.
 
+#### Example
+
+```html
+<masonry-layout><div class="item"></div><div class="item"></div></masonry-layout>
+```
+
 #### Properties
 
-| Property      | Attribute     | Type               | Description                                      |
-|---------------|---------------|--------------------|--------------------------------------------------|
-| `cols`        | `cols`        | `number \| "auto"` | The amount of columns.                           |
-| `debounce`    | `debounce`    | `number`           | The ms of debounce when the element resizes.     |
-| `gap`         | `gap`         | `number`           | The gap in pixels between the columns.           |
-| `maxColWidth` | `maxcolwidth` | `number`           | The maximum width of each column if cols are set to auto. |
+| Property       | Attribute     | Type               | Description                                      |
+|----------------|---------------|--------------------|--------------------------------------------------|
+| `cols`         | `cols`        | `number \| "auto"` | The amount of columns.                           |
+| `debounce`     | `debounce`    | `number`           | The ms of debounce when the element resizes.     |
+| `gap`          | `gap`         | `number`           | The gap in pixels between the columns.           |
+| `layout`       |               |                    |                                                  |
+| `maxColWidth`  | `maxcolwidth` | `number`           | The maximum width of each column if cols are set to auto. |
+| `onResize`     |               |                    |                                                  |
+| `onSlotChange` |               |                    |                                                  |
+
+#### Methods
+
+| Method           | Type                                    | Description                                      |
+|------------------|-----------------------------------------|--------------------------------------------------|
+| `layout`         | `(): void`                              | Layouts the elements.                            |
+| `onResize`       | `(entries?: object \| undefined): void` | Each time the element resizes we need to schedule a layout<br />if the amount available columns has has changed. |
+| `onSlotChange`   | `(): void`                              |                                                  |
+| `renderCols`     | `(colCount: number): void`              | Render X amount of columns.                      |
+| `scheduleLayout` | `(ms?: number): void`                   | Schedules a layout.                              |
 
 #### Slots
 
