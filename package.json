@@ -2,7 +2,7 @@
 	"name": "@appnest/masonry-layout",
 	"version": "2.0.8",
 	"license": "MIT",
-	"module": "index.js",
+	"type": "module",
 	"author": "Appnest",
 	"website": "https://appnest-demo.firebaseapp.com/masonry-layout/",
 	"description": "An efficient and fast web component that gives you a beautiful masonry layout",
