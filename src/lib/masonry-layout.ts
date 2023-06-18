@@ -1,4 +1,4 @@
-import { COL_COUNT_CSS_VAR_NAME, ColHeightMap, debounce, DEFAULT_COLS, DEFAULT_DEBOUNCE_MS, DEFAULT_GAP_PX, DEFAULT_MAX_COL_WIDTH, ELEMENT_NODE_TYPE, findSmallestColIndex, GAP_CSS_VAR_NAME, getColCount, getNumberAttribute } from "./masonry-helpers";
+import { COL_COUNT_CSS_VAR_NAME, ColHeightMap, debounce, DEFAULT_COLS, DEFAULT_DEBOUNCE_MS, DEFAULT_GAP_PX, DEFAULT_MAX_COL_WIDTH, ELEMENT_NODE_TYPE, findSmallestColIndex, GAP_CSS_VAR_NAME, getColCount, getNumberAttribute } from "./masonry-helpers.js";
 
 /**
  * Typings required for the resize observer.
@@ -179,7 +179,7 @@ export class MasonryLayout extends HTMLElement {
 		this.$unsetElementsSlot.addEventListener("slotchange", this.onSlotChange);
 
 		// Attach resize observer so we can relayout eachtime the size changes
-		if ("ResizeObserver" in window) {
+		if (window.ResizeObserver) {
 			this.ro = new ResizeObserver(this.onResize);
 			this.ro.observe(this);
 
