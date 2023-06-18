@@ -1,7 +1,10 @@
-const rimraf = require("rimraf");
-const path = require("path");
-const fs = require("fs-extra");
+import rimraf from "rimraf";
+import path from "path";
+import fs from "fs-extra";
+import url from "url";
 const outLib = "dist";
+
+const __dirname = url.fileURLToPath(new URL(".", import.meta.url));
 
 // TODO: Run "tsc -p tsconfig.build.json" from this script and rename it to "build".
 
