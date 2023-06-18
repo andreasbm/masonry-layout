@@ -179,7 +179,7 @@ export class MasonryLayout extends HTMLElement {
 		this.$unsetElementsSlot.addEventListener("slotchange", this.onSlotChange);
 
 		// Attach resize observer so we can relayout eachtime the size changes
-		if ("ResizeObserver" in window) {
+		if (window.ResizeObserver) {
 			this.ro = new ResizeObserver(this.onResize);
 			this.ro.observe(this);
 

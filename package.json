@@ -48,6 +48,7 @@
 	},
 	"devDependencies": {
 		"@appnest/readme": "^1.2.7",
-		"@appnest/web-config": "0.5.0"
+		"@appnest/web-config": "0.5.0",
+		"typescript": "^5"
 	}
 }
