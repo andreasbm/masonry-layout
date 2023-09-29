@@ -53,5 +53,9 @@
 		"rollup-plugin-ts": "^3.4.4",
 		"typescript": "^5.2.2",
 		"vite": "^4.4.9"
+	},
+	"engines" : {
+		"npm" : ">=9.0.0",
+		"node" : ">=19.0.0"
 	}
 }
