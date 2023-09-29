@@ -35,9 +35,9 @@
 		"b:lib": "node pre-build.js && tsc -p tsconfig.build.json && rollup -c rollup-build.config.ts && npm run custom-elements-json",
 		"readme": "node node_modules/.bin/readme generate",
 		"postversion": "npm run readme && npm run b:lib",
-		"publish:patch": "np patch --contents=dist --no-cleanup",
-		"publish:minor": "np minor --contents=dist --no-cleanup",
-		"publish:major": "np major --contents=dist --no-cleanup",
+		"publish:patch": "np patch --contents=dist --no-cleanup --no-tests",
+		"publish:minor": "np minor --contents=dist --no-cleanup --no-tests",
+		"publish:major": "np major --contents=dist --no-cleanup --no-tests",
 		"custom-elements-json": "npx wca analyze src/lib --format json --outFile dist/custom-elements.json"
 	},
 	"devDependencies": {
