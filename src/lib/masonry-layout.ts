@@ -184,7 +184,7 @@ export class MasonryLayout extends HTMLElement {
 			this.ro.observe(this);
 
 		} else {
-			window.addEventListener("resize", this.onResize as any);
+			(window as Window).addEventListener("resize", this.onResize as any);
 		}
 	}
 

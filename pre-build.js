@@ -1,4 +1,4 @@
-const rimraf = require("rimraf");
+const {rimraf} = require("rimraf");
 const path = require("path");
 const fs = require("fs-extra");
 const outLib = "dist";
@@ -13,7 +13,8 @@ async function preBuild () {
 
 function cleanLib () {
 	return new Promise(res => {
-		rimraf(outLib, res);
+		rimraf.sync(outLib);
+		res();
 	});
 }
 

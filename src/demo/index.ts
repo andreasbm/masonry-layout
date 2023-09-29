@@ -1,5 +1,5 @@
 import { DEFAULT_COLS, DEFAULT_GAP_PX, DEFAULT_MAX_COL_WIDTH } from "../lib/masonry-helpers";
-import { MasonryLayout } from "../lib/masonry-layout";
+import { MasonryLayout } from "../lib";
 import "../lib/masonry-layout";
 
 const $masonry = document.querySelector<MasonryLayout>("#masonry")!;
