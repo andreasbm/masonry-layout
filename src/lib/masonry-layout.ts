@@ -14,16 +14,6 @@ declare type ResizeObserverConstructor = new (callback: ((entries: ResizeObserve
 declare const ResizeObserver: ResizeObserverConstructor;
 
 /**
- * Typings required for ShadyCSS.
- */
-declare global {
-	interface Window {
-		ShadyCSS?: any;
-		ShadyDOM?: any;
-	}
-}
-
-/**
  * Template for the masonry layout.
  * Max width of each column is computed as the width in percentage of
  * the column minus the total with of the gaps divided between each column.
@@ -66,9 +56,6 @@ $template.innerHTML = `
     <slot></slot>
   </div>
 `;
-
-// Use polyfill only in browsers that lack native Shadow DOM.
-window.ShadyCSS && window.ShadyCSS.prepareTemplateStyles($template, "masonry-layout");
 
 /**
  * Masonry layout web component. It places the slotted elements in the optimal position based
@@ -292,9 +279,6 @@ export class MasonryLayout extends HTMLElement {
 
 		// Set the column count so we can compute the correct width of the columns
 		this.style.setProperty(COL_COUNT_CSS_VAR_NAME, colCount.toString());
-
-		// Commit the changes for ShadyCSS
-		window.ShadyCSS && window.ShadyCSS.styleElement(this);
 	}
 
 	/**
@@ -365,9 +349,6 @@ export class MasonryLayout extends HTMLElement {
 
 			// Render the columns
 			this.renderCols(colCount);
-
-			// Commit the changes for ShadyCSS
-			window.ShadyCSS && window.ShadyCSS.styleElement(this);
 
 			// console.timeEnd("layout");
 		});
