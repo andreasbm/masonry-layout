@@ -36,11 +36,11 @@ $template.innerHTML = `
     }
 
     .column:not(:last-child) {
-      margin-right: var(${GAP_CSS_VAR_NAME}, ${DEFAULT_GAP_PX}px);
+      margin-inline-end: var(${GAP_CSS_VAR_NAME}, ${DEFAULT_GAP_PX}px);
     }
 
     .column ::slotted(*) {
-      margin-bottom: var(${GAP_CSS_VAR_NAME}, ${DEFAULT_GAP_PX}px);
+      margin-block-end: var(${GAP_CSS_VAR_NAME}, ${DEFAULT_GAP_PX}px);
       box-sizing: border-box;
       width: 100%;
     }
