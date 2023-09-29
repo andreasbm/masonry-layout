@@ -1,6 +1,6 @@
 {
 	"name": "@appnest/masonry-layout",
-	"version": "2.0.8",
+	"version": "2.1.0",
 	"license": "MIT",
 	"module": "index.js",
 	"author": "Appnest",
@@ -54,8 +54,8 @@
 		"typescript": "^5.2.2",
 		"vite": "^4.4.9"
 	},
-	"engines" : {
-		"npm" : ">=9.0.0",
-		"node" : ">=19.0.0"
+	"engines": {
+		"npm": ">=9.0.0",
+		"node": ">=19.0.0"
 	}
 }
